@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Input } from "@/components/ui";
+import Link from "next/link";
 
 function LoginForm() {
   return (
@@ -18,7 +19,7 @@ function LoginForm() {
       <p className="text-center font-medium ">
         Don't have an account?{" "}
         <span className="text-[#137fec] cursor-pointer hover:text-[#137fec]/80">
-          Sign up
+          <Link href="/register">Sign up</Link>
         </span>
       </p>
     </form>
