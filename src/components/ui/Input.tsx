@@ -18,7 +18,7 @@ export default function Input({
   return (
     <div className="space-y-2">
       {label && (
-        <label className="text-sm font-medium" htmlFor={id}>
+        <label className="text-sm font-medium " htmlFor={id}>
           {label}
         </label>
       )}
