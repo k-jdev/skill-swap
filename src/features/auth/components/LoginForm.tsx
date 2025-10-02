@@ -49,9 +49,11 @@ function LoginForm() {
     try {
       // TODO: change this to real login logic
       await new Promise((r) => setTimeout(r, 700));
+
     } catch (err) {
       setErrors({ form: "Server error, please try again" });
       console.log(err);
+
     } finally {
       setIsSubmitting(false);
     }
@@ -90,8 +92,10 @@ function LoginForm() {
 
       <Button text={isSubmitting ? "Logging in..." : "Login"} />
 
+
       <p className="text-center font-medium ">
         Don&apos;t have an account?{" "}
+
         <span className="text-[#137fec] cursor-pointer hover:text-[#137fec]/80">
           <Link href="/register">Sign up</Link>
         </span>
