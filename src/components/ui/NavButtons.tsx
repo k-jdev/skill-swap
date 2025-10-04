@@ -4,7 +4,7 @@ type Props = { isLogin?: boolean; text?: string };
 
 export default function NavButtons({ isLogin, text }: Props) {
   return (
-    <button className="">
+    <div className="">
       {isLogin ? (
         <button className="flex items-center justify-center  rounded-full py-2 px-4 bg-[#137fec]/10 text-[#137fec]">
           {text}
@@ -14,6 +14,6 @@ export default function NavButtons({ isLogin, text }: Props) {
           {text}
         </button>
       )}
-    </button>
+    </div>
   );
 }
