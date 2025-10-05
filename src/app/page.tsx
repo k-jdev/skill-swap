@@ -1,7 +1,11 @@
+import { NavBar } from "@/components/ui";
+import Header from "@/features/home/components/Header";
+
 export default function Home() {
   return (
-    <div className="">
-      <h1>Hello world</h1>
+    <div className="bg-[#f6f7f8]">
+      <NavBar />
+      <Header />
     </div>
   );
 }
