@@ -4,8 +4,10 @@ import { Button, Input } from "@/shared/ui";
 
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
+import { useRouter } from "next/navigation";
 //TODO: get theory and practice of zod and form validation on register form
 function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{
@@ -49,6 +51,8 @@ function LoginForm() {
     try {
       // TODO: change this to real login logic
       await new Promise((r) => setTimeout(r, 700));
+
+      router.push("/");
     } catch (err) {
       setErrors({ form: "Server error, please try again" });
       console.log(err);
@@ -88,7 +92,7 @@ function LoginForm() {
 
       {errors.form && <p className="text-center text-red-500">{errors.form}</p>}
 
-      <Button text={isSubmitting ? "Logging in..." : "Login"} />
+      <Button>{isSubmitting ? "Logging in..." : "Login"}</Button>
 
       <p className="text-center font-medium ">
         Don&apos;t have an account?{" "}
