@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { NavBar } from "@/components/ui";
+import { NavBar } from "@/shared/ui";
+import { createMetadata } from "@/shared/lib/createMetadata";
 
-export const metadata: Metadata = {
-  title: "Browse | SkillSwap",
-  description: "Explore and discover new skills",
-};
+export const metadata = createMetadata(
+  "Browse",
+  "Explore and discover new skills",
+);
 
 export default function PublicLayout({
   children,

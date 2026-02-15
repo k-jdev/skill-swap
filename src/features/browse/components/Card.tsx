@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui";
+import { Button } from "@/shared/ui";
 
 function Card() {
   return (
