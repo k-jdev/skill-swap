@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { Button, Input } from "@/components/ui";
+import { Button, Input } from "@/shared/ui";
 
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";

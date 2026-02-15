@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button, Input } from "@/components/ui";
+import { Button, Input } from "@/shared/ui";
 import Link from "next/link";
 
 function RegisterForm() {
