@@ -5,7 +5,7 @@ import { Button, Input } from "@/shared/ui";
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
-//TODO: get theory and practice of zod and form validation on register form
+//TODO: rewrite this on react-hook-form
 function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");

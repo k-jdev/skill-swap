@@ -1,13 +1,44 @@
 "use client";
 import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@/shared/ui";
 import Link from "next/link";
+import { registerSchema } from "../schemas";
+import { useRouter } from "next/navigation";
+import type { z } from "zod";
+
+type RegisterFormData = z.infer<typeof registerSchema>;
 
 function RegisterForm() {
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      // TODO: change this to real login logic
+      await new Promise((r) => setTimeout(r, 700));
+      console.log(data);
+      router.push("/");
+    } catch {
+      setError("root", { message: "Server error, please try again" });
+    }
+  };
+
   return (
-    <form className="bg-white p-8 rounded-xl shadow-xl space-y-6">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="bg-white p-8 rounded-xl shadow-xl space-y-6"
+    >
       <div>
-        {" "}
         <h1 className="text-2xl font-bold text-center text-black">
           Create your account
         </h1>
@@ -16,28 +47,50 @@ function RegisterForm() {
         </p>
       </div>
       <div className="space-y-6">
-        <Input type="name" placeholder="Name" label="Name" id="name" />
-        <Input type="email" placeholder="Email" label="Email" id="email" />
         <Input
+          {...register("name")}
+          error={errors.name?.message ?? null}
+          type="text"
+          placeholder="Name"
+          label="Name"
+          id="name"
+        />
+        <Input
+          {...register("email")}
+          error={errors.email?.message ?? null}
+          type="email"
+          placeholder="Email"
+          label="Email"
+          id="email"
+        />
+        <Input
+          {...register("password")}
+          error={errors.password?.message ?? null}
           type="password"
           placeholder="Password"
           label="Password"
           id="password"
         />
         <Input
+          {...register("confirmPassword")}
+          error={errors.confirmPassword?.message ?? null}
           type="password"
           placeholder="Confirm Password"
           label="Confirm Password"
           id="confirm-password"
         />
       </div>
-
-      <Button text="Register" />
-      <p className="text-center font-medium ">
+      {errors.root && (
+        <p className="text-center text-red-500">{errors.root.message}</p>
+      )}
+      <Button disabled={isSubmitting}>
+        {isSubmitting ? "Registering..." : "Register"}
+      </Button>
+      <p className="text-center font-medium">
         Already have an account?{" "}
-        <span className="text-[#137fec] cursor-pointer hover:text-[#137fec]/80">
-          <Link href="/login">Log in</Link>
-        </span>
+        <Link href="/login" className="text-[#137fec] hover:text-[#137fec]/80">
+          Log in
+        </Link>
       </p>
     </form>
   );
