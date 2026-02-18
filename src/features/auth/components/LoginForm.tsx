@@ -1,11 +1,19 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { Button, Input } from "@/components/ui";
+import { Button, Input } from "@/shared/ui";
+import useProfileStore from "@/shared/store/useProfileStore";
 
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
-//TODO: get theory and practice of zod and form validation on register form
+import { useRouter } from "next/navigation";
+//TODO: rewrite this on react-hook-form
 function LoginForm() {
+  const router = useRouter();
+  const {
+    setIsAuthenticated,
+    setName,
+    setEmail: setStoreEmail,
+  } = useProfileStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{
@@ -50,10 +58,15 @@ function LoginForm() {
       // TODO: change this to real login logic
       await new Promise((r) => setTimeout(r, 700));
 
+      const userName = email.split("@")[0];
+      setName(userName);
+      setStoreEmail(email);
+      setIsAuthenticated(true);
+
+      router.push("/");
     } catch (err) {
       setErrors({ form: "Server error, please try again" });
       console.log(err);
-
     } finally {
       setIsSubmitting(false);
     }
@@ -90,12 +103,10 @@ function LoginForm() {
 
       {errors.form && <p className="text-center text-red-500">{errors.form}</p>}
 
-      <Button text={isSubmitting ? "Logging in..." : "Login"} />
-
+      <Button>{isSubmitting ? "Logging in..." : "Login"}</Button>
 
       <p className="text-center font-medium ">
         Don&apos;t have an account?{" "}
-
         <span className="text-[#137fec] cursor-pointer hover:text-[#137fec]/80">
           <Link href="/register">Sign up</Link>
         </span>
