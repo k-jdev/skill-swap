@@ -1,10 +1,18 @@
-import React from "react";
-import Header from "@/features/browse/components/Header";
-import Search from "@/features/browse/components/Search";
-import SkillFilter from "@/features/browse/components/SkillFilter";
-import Card from "@/features/browse/components/Card";
+"use client";
+import React, { useState } from "react";
+import {
+  Header,
+  Card,
+  Search,
+  SkillFilter,
+} from "@/features/browse/components";
 
 function BrowserPage() {
+  // TODO: make filter logic
+  // const [filters, setFilters] = useState<Record<string, boolean>>({
+  //   html: false,
+  //   css: false,
+  // });
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <Header />
