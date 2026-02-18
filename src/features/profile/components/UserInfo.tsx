@@ -1,7 +1,9 @@
+"use client";
 import React from "react";
 import Image from "next/image";
-
+import useProfileStore from "@/shared/store/useProfileStore";
 function UserInfo() {
+  const { name, email } = useProfileStore();
   return (
     <div className="p-10 flex justify-between gap-10 border-b-2 border-slate-200 ">
       <Image
@@ -12,7 +14,8 @@ function UserInfo() {
         className="rounded-full w-fit h-fit"
       />
       <div className="flex-col space-y-2  w-full">
-        <h2 className="text-5xl font-bold">Alex Adams</h2>
+        <h2 className="text-5xl font-bold">{name}</h2>
+        <p className="text-slate-500 text-[20px]">Email: {email}</p>
         <p className="text-slate-500 text-[20px]">Product Designer</p>
         <p className="text-slate-400 text-[18px]">San Francisco, CA</p>
         <p className="mt-4 text-slate-500 max-w-2/3 text-[18px]">
