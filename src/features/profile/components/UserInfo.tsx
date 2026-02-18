@@ -7,9 +7,9 @@ function UserInfo() {
       <Image
         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
         alt="Profile"
-        width={220}
+        width={400}
         height={100}
-        className="rounded-full"
+        className="rounded-full w-fit h-fit"
       />
       <div className="flex-col space-y-2  w-full">
         <h2 className="text-5xl font-bold">Alex Adams</h2>
