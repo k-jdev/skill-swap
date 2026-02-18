@@ -14,7 +14,7 @@ function Search() {
         />
       </div>
       <input
-        className="w-full h-14 pl-12 pr-4 rounded-full bg-slate-200/50 focus:ring-primary border border-slate-300 dark:border-slate-700 transition-all text-slate-900 dark:text-white placeholder-slate-500"
+        className="w-full h-14 pl-12 pr-4 rounded-full bg-slate-200/50  border border-slate-300  transition-all text-slate-900 dark:text-white placeholder-slate-500"
         placeholder="Search for skills like 'Graphic Design'..."
         type="search"
       />

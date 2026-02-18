@@ -1,9 +1,6 @@
-import type { Metadata } from "next";
+import { createMetadata } from "@/shared/lib/createMetadata";
 
-export const metadata: Metadata = {
-  title: "Auth | SkillSwap",
-  description: "Sign in or create an account",
-};
+export const metadata = createMetadata("Auth", "Sign in or create an account");
 
 export default function AuthLayout({
   children,

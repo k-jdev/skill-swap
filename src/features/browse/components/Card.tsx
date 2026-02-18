@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui";
+import { Button } from "@/shared/ui";
 
 function Card() {
   return (
-    <div className="bg-white border border-gray-300 rounded-2xl hover:shadow-lg max-w-[330px] transition duration-300 cursor-pointer overflow-hidden">
+    <div className="bg-white border border-gray-200 rounded-2xl hover:shadow-lg max-w-[330px] transition duration-300 cursor-pointer overflow-hidden">
       <div className="relative">
         <Image
           src="/images/web-development.jpg"
