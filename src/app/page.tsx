@@ -1,4 +1,4 @@
-import { NavBar } from "@/components/ui";
+import { NavBar } from "@/shared/ui";
 import Header from "@/features/home/components/Header";
 
 export default function Home() {

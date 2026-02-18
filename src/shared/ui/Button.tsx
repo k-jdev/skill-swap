@@ -1,14 +1,28 @@
 import React from "react";
 
-type Props = { text?: string; className?: string };
+type Props = {
+  text?: string;
+  className?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  children?: React.ReactNode;
+  disabled?: boolean;
+};
 
-export default function Button({ text, className }: Props) {
+export default function Button({
+  text,
+  className,
+  onClick,
+  children,
+  disabled,
+}: Props) {
   return (
     <button
+      onClick={onClick}
+      disabled={disabled}
       className={`w-full bg-[#137fec] cursor-pointer text-white font-bold py-3 px-4 rounded-[1rem] hover:bg-[#137fec]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#137fec] focus:ring-offset-[#0d141b] dark:focus:ring-offset-[#101922] transition-colors duration-300 ${className}`}
       type="submit"
     >
-      {text || "Login"}
+      {children || text || "Login"}
     </button>
   );
 }
