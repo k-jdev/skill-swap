@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef, useState } from "react";
 import { Button, Input } from "@/shared/ui";
+import useProfileStore from "@/shared/store/useProfileStore";
 
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
@@ -8,6 +9,11 @@ import { useRouter } from "next/navigation";
 //TODO: rewrite this on react-hook-form
 function LoginForm() {
   const router = useRouter();
+  const {
+    setIsAuthenticated,
+    setName,
+    setEmail: setStoreEmail,
+  } = useProfileStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{
@@ -51,6 +57,11 @@ function LoginForm() {
     try {
       // TODO: change this to real login logic
       await new Promise((r) => setTimeout(r, 700));
+
+      const userName = email.split("@")[0];
+      setName(userName);
+      setStoreEmail(email);
+      setIsAuthenticated(true);
 
       router.push("/");
     } catch (err) {

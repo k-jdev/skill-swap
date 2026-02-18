@@ -1,18 +1,24 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@/shared/ui";
 import Link from "next/link";
 import { registerSchema } from "../schemas";
 import { useRouter } from "next/navigation";
+import useProfileStore from "@/shared/store/useProfileStore";
 import type { z } from "zod";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 function RegisterForm() {
   const router = useRouter();
-
+  const {
+    setIsAuthenticated,
+    setName,
+    setEmail: setStoreEmail,
+  } = useProfileStore();
+  const [email, setEmail] = useState("");
   const {
     register,
     handleSubmit,
@@ -24,6 +30,10 @@ function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
+      const userName = email.split("@")[0];
+      setName(userName);
+      setStoreEmail(email);
+      setIsAuthenticated(true);
       // TODO: change this to real login logic
       await new Promise((r) => setTimeout(r, 700));
       console.log(data);
