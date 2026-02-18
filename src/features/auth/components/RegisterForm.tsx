@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@/shared/ui";
@@ -7,6 +7,7 @@ import Link from "next/link";
 import { registerSchema } from "../schemas";
 import { useRouter } from "next/navigation";
 import useProfileStore from "@/shared/store/useProfileStore";
+import { createClient } from "@/utils/supabase/client";
 import type { z } from "zod";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -18,7 +19,6 @@ function RegisterForm() {
     setName,
     setEmail: setStoreEmail,
   } = useProfileStore();
-  const [email, setEmail] = useState("");
   const {
     register,
     handleSubmit,
@@ -30,15 +30,29 @@ function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const userName = email.split("@")[0];
-      setName(userName);
-      setStoreEmail(email);
+      const supabase = createClient();
+
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            username: data.name,
+          },
+        },
+      });
+
+      if (error) {
+        setError("root", { message: error.message });
+        return;
+      }
+
+      setName(data.name);
+      setStoreEmail(data.email);
       setIsAuthenticated(true);
-      // TODO: change this to real login logic
-      await new Promise((r) => setTimeout(r, 700));
-      console.log(data);
       router.push("/");
-    } catch {
+    } catch (err) {
+      console.error("Registration error:", err);
       setError("root", { message: "Server error, please try again" });
     }
   };

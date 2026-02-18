@@ -6,6 +6,7 @@ import useProfileStore from "@/shared/store/useProfileStore";
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 //TODO: rewrite this on react-hook-form
 function LoginForm() {
   const router = useRouter();
@@ -55,10 +56,20 @@ function LoginForm() {
 
     setIsSubmitting(true);
     try {
-      // TODO: change this to real login logic
-      await new Promise((r) => setTimeout(r, 700));
+      const supabase = createClient();
 
-      const userName = email.split("@")[0];
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      if (error) {
+        setErrors({ form: error.message });
+        return;
+      }
+
+      const userName =
+        authData.user?.user_metadata?.username || email.split("@")[0];
       setName(userName);
       setStoreEmail(email);
       setIsAuthenticated(true);
