@@ -31,7 +31,7 @@ export default function NavBar() {
   }, []);
 
   return (
-    <nav className="flex items-center justify-between py-4 px-5 border-b border-slate-200 ">
+    <nav className="flex items-center justify-between py-4 px-5 border-b border-slate-200 bg-white">
       <div className="flex w-full items-center justify-between gap-4">
         <div className="flex items-center gap-10 cursor-pointer">
           <Link href="/">
