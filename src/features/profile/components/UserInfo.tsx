@@ -3,16 +3,20 @@ import React from "react";
 import Image from "next/image";
 import useProfileStore from "@/shared/store/useProfileStore";
 function UserInfo() {
-  const { name, email } = useProfileStore();
+  const { name, email, avatar } = useProfileStore();
   return (
     <div className="p-10 flex justify-between gap-10 border-b-2 border-slate-200 ">
-      <Image
-        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-        alt="Profile"
-        width={400}
-        height={100}
-        className="rounded-full w-fit h-fit"
-      />
+      {avatar ? (
+        <Image
+          src={avatar}
+          alt="profile"
+          className="w-10 h-10 rounded-full object-cover "
+        />
+      ) : (
+        <div className="w-[30%] h-[300px] rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold ">
+          {name.charAt(0).toUpperCase()}
+        </div>
+      )}
       <div className="flex-col space-y-2  w-full">
         <h2 className="text-5xl font-bold">{name}</h2>
         <p className="text-slate-500 text-[20px]">Email: {email}</p>
