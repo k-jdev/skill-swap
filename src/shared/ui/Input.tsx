@@ -1,30 +1,16 @@
 import React from "react";
 
-type InputProps = {
-  type?: string;
-  placeholder?: string;
+type InputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "className"
+> & {
   label?: string;
-  id?: string;
   className?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string | null;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      type = "text",
-      placeholder,
-      label,
-      id,
-      className = "",
-      value,
-      onChange,
-      error,
-    },
-    ref
-  ) => {
+  ({ label, id, className = "", error, ...inputProps }, ref) => {
     return (
       <div className="space-y-2">
         {label && (
@@ -38,15 +24,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className={`w-full p-4 rounded-[1rem] bg-[#e7edf3] dark:bg-input-dark border-none focus:ring-2 focus:ring-primary focus:outline-none placeholder-subtle-light dark:placeholder-subtle-dark ${className} ${
             error ? "ring-2 ring-red-500" : ""
           }`}
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
+          {...inputProps}
         />
         {error && <p className="text-sm text-red-500">{error}</p>}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

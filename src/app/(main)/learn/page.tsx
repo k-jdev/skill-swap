@@ -1,4 +1,6 @@
-import React from "react";
+import { createMetadata } from "@/shared/lib/createMetadata";
+
+export const metadata = createMetadata("Learn", "Learn new skills");
 
 export default function LearnPage() {
   return (
