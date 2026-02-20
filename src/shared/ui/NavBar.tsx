@@ -4,8 +4,13 @@ import Image from "next/image";
 import NavButtons from "./NavButtons";
 import Link from "next/link";
 import useProfileStore from "../store/useProfileStore";
+import {
+  logoutUser,
+  getCurrentUser,
+} from "@/shared/utils/auth/services/auth.service";
 
 export default function NavBar() {
+  console.log(getCurrentUser());
   const { isAuthenticated, avatar, name, setIsAuthenticated } =
     useProfileStore() as {
       isAuthenticated: boolean;
@@ -85,7 +90,12 @@ export default function NavBar() {
                 >
                   <div
                     className="flex items-center gap-2 pr-6 cursor-pointer"
-                    onClick={() => setIsAuthenticated(false)}
+                    onClick={async () => {
+                      const { error } = await logoutUser();
+                      if (!error) {
+                        setIsAuthenticated(false);
+                      }
+                    }}
                   >
                     <Image
                       src="/icons/exit.svg"

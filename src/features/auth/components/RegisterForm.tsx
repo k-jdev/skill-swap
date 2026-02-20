@@ -7,7 +7,7 @@ import Link from "next/link";
 import { registerSchema } from "../schemas";
 import { useRouter } from "next/navigation";
 import useProfileStore from "@/shared/store/useProfileStore";
-import { createClient } from "@/utils/supabase/client";
+import { registerUser } from "@/shared/utils/auth/services/auth.service";
 import type { z } from "zod";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -30,16 +30,10 @@ function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const supabase = createClient();
-
-      const { error } = await supabase.auth.signUp({
+      const { error } = await registerUser({
         email: data.email,
         password: data.password,
-        options: {
-          data: {
-            username: data.name,
-          },
-        },
+        name: data.name,
       });
 
       if (error) {
