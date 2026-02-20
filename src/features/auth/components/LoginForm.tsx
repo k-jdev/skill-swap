@@ -7,7 +7,7 @@ import useProfileStore from "@/shared/store/useProfileStore";
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
+import { loginUser } from "@/shared/utils/auth/services/auth.service";
 import type { z } from "zod";
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -31,10 +31,8 @@ function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const supabase = createClient();
-
-      const { data: authData, error } = await supabase.auth.signInWithPassword({
-        email: data.email.trim(),
+      const { data: authData, error } = await loginUser({
+        email: data.email,
         password: data.password,
       });
 
