@@ -1,4 +1,5 @@
 <img width="1906" height="853" alt="image" src="https://github.com/user-attachments/assets/37346896-a9d4-4b82-9ae6-84163d839968" />
+
 # SkillSwap
 
 A modern platform for skill exchange and learning. Connect with others, share your expertise, and discover new skills in a collaborative community.
@@ -51,12 +52,14 @@ src/
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd skill-swap
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -111,11 +114,13 @@ npm run lint
 ## Components
 
 ### UI Components
+
 - **Button** - Reusable button component with hover effects
 - **Input** - Form input with error handling and validation display
 - **NavBar** - Navigation bar with logo and action buttons
 
 ### Feature Components
+
 - **LoginForm** - User login with email and password validation
 - **RegisterForm** - User registration with form fields
 - **Search** - Skill search component with search icon
@@ -136,9 +141,8 @@ The project uses Geist and Geist Mono fonts from Google Fonts. To change fonts, 
 ## Form Validation
 
 The project uses Zod for schema validation. Validation schemas are located in `src/features/auth/schemas/`. Currently implemented:
-- Login schema - Email and password validation
 
-**TODO**: Implement and document form validation for the registration form.
+- Login schema - Email and password validation
 
 ## Future Enhancements
 
