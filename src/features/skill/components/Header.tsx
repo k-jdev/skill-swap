@@ -22,8 +22,8 @@ function Header() {
           Back to Dashboard
         </p>
       </div>
-      <div>
-        <h2 className="text-[#0F172A] font-black text-3xl">
+      <div className="flex-col ">
+        <h2 className="text-[#0F172A] font-black text-3xl mb-2">
           Offer a New Skill
         </h2>
         <p className="text-[#64748B] text-lg">
