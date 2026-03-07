@@ -3,18 +3,37 @@ import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 function SkillForm() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const [selectedLevel, setSelectedLevel] = useState<
     "beginner" | "intermediate" | "advanced"
   >("beginner");
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+  }
+  const {
+    ref: registerRef,
+    onChange: registerOnChange,
+    ...rest
+  } = register("image");
   return (
-    <form className="p-8 ">
+    <form
+      onSubmit={handleSubmit((data) => {
+        console.log(data);
+      })}
+      className="p-8 "
+    >
       <div className="grid gap-2 mb-2">
         <label className="text-[#334155] font-bold text-sm" htmlFor="">
           Skill Title
         </label>
         <input
+          {...register("skillTitle", { required: true })}
           className="border border-[#E2E8F0] px-4 py-3 rounded-[12px]"
           type="text"
           placeholder="e.g. Master React.js Development"
@@ -29,16 +48,16 @@ function SkillForm() {
             Category
           </label>
           <select
+            {...register("category", { required: true })}
             className="border border-[#E2E8F0] px-4 py-3 rounded-[12px] w-full appearance-none"
             name="category"
             id="category"
+            defaultValue={"Select Category"}
           >
             {" "}
-            <option value="value1">Значение 1</option>
-            <option value="value2" selected>
-              Select Category
-            </option>
-            <option value="value3">Значение 3</option>
+            <option value="programming">Programming</option>
+            <option value="math">Math</option>
+            <option value="language">Language</option>
           </select>
         </div>
         <div className="grid gap-2 flex-1">
@@ -49,16 +68,16 @@ function SkillForm() {
             Teaching Language
           </label>
           <select
+            {...register("language", { required: true })}
             className="border border-[#E2E8F0] px-4 py-3 rounded-[12px] w-full appearance-none"
             name="language"
             id="language"
+            defaultValue="english"
           >
             {" "}
-            <option value="value1">Ukrainian</option>
-            <option value="value2" selected>
-              English
-            </option>
-            <option value="value3">German</option>
+            <option value="ukrainian">Ukrainian</option>
+            <option value="english">English</option>
+            <option value="german">German</option>
           </select>
         </div>
       </div>
@@ -72,7 +91,10 @@ function SkillForm() {
             <div
               key={level}
               className="flex-1 items-center justify-center text-center cursor-pointer"
-              onClick={() => setSelectedLevel(level)}
+              onClick={() => {
+                setSelectedLevel(level);
+                setValue("level", level);
+              }}
             >
               <div
                 className={`rounded-[12px] p-2 h-8 items-center justify-center flex ${
@@ -82,7 +104,7 @@ function SkillForm() {
                 }`}
               >
                 {selectedLevel === level && (
-                  <div className="bg-white rounded-full p-1.5 w-fit"> </div>
+                  <div className="bg-white rounded-full p-1.5 w-fit"></div>
                 )}
               </div>
               <h4 className="text-[#64748B] text-[14px] mt-2 font-semibold capitalize">
@@ -98,10 +120,9 @@ function SkillForm() {
           Skill Description
         </label>
         <textarea
+          {...register("skillDescription", { required: true })}
           className="p-4 rounded-[12px] border border-[#E2E8F0]"
           placeholder="Describe what you can teach and what students can expect to learn..."
-          name=""
-          id=""
         ></textarea>
         <p className=" text-[#94A3B8]">Minimum 100 characters recommended.</p>
       </div>
@@ -112,30 +133,54 @@ function SkillForm() {
         </label>
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-[#CBD5E1] rounded-[12px] p-8 bg-[#F8FAFC]/50 flex flex-col items-center justify-center  cursor-pointer hover:bg-[#F1F5F9] transition"
+          className="border-2 border-dashed border-[#CBD5E1] rounded-[12px] overflow-hidden bg-[#F8FAFC]/50 flex flex-col items-center justify-center cursor-pointer hover:bg-[#F1F5F9] transition min-h-[140px]"
         >
-          <svg
-            width="27"
-            height="35"
-            viewBox="0 0 27 35"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 27C2.175 27 1.46875 26.7062 0.88125 26.1187C0.29375 25.5312 0 24.825 0 24V3C0 2.175 0.29375 1.46875 0.88125 0.88125C1.46875 0.29375 2.175 0 3 0H24C24.825 0 25.5312 0.29375 26.1187 0.88125C26.7062 1.46875 27 2.175 27 3V24C27 24.825 26.7062 25.5312 26.1187 26.1187C25.5312 26.7062 24.825 27 24 27H3ZM3 24H24V3H3V24ZM4.5 21H22.5L16.875 13.5L12.375 19.5L9 15L4.5 21ZM3 24V3V24Z"
-              fill="#94A3B8"
-            />
-          </svg>
-
-          <p className="text-[#334155] font-bold text-[15px]">
-            Click to upload or drag &amp; drop
-          </p>
-          <p className="text-[#94A3B8] text-[13px]">PNG, JPG up to 5MB</p>
+          {previewUrl ? (
+            <div className="relative w-full h-full">
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="w-full h-48 object-cover rounded-[10px]"
+              />
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition rounded-[10px]">
+                <p className="text-white font-semibold text-sm">
+                  Click to change
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <svg
+                width="27"
+                height="35"
+                viewBox="0 0 27 35"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 27C2.175 27 1.46875 26.7062 0.88125 26.1187C0.29375 25.5312 0 24.825 0 24V3C0 2.175 0.29375 1.46875 0.88125 0.88125C1.46875 0.29375 2.175 0 3 0H24C24.825 0 25.5312 0.29375 26.1187 0.88125C26.7062 1.46875 27 2.175 27 3V24C27 24.825 26.7062 25.5312 26.1187 26.1187C25.5312 26.7062 24.825 27 24 27H3ZM3 24H24V3H3V24ZM4.5 21H22.5L16.875 13.5L12.375 19.5L9 15L4.5 21ZM3 24V3V24Z"
+                  fill="#94A3B8"
+                />
+              </svg>
+              <p className="text-[#334155] font-bold text-[15px] mt-3">
+                Click to upload or drag &amp; drop
+              </p>
+              <p className="text-[#94A3B8] text-[13px]">PNG, JPG up to 5MB</p>
+            </>
+          )}
           <input
-            ref={fileInputRef}
+            ref={(e) => {
+              registerRef(e);
+              fileInputRef.current = e;
+            }}
             className="hidden"
             type="file"
             accept="image/png, image/jpeg"
+            {...rest}
+            onChange={(e) => {
+              registerOnChange(e);
+              handleFileChange(e);
+            }}
           />
         </div>
       </div>
