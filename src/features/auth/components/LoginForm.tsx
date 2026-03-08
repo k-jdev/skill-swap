@@ -7,7 +7,8 @@ import useProfileStore from "@/shared/store/useProfileStore";
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/shared/utils/auth/services/auth.service";
+import { loginAction } from "../actions";
+
 import type { z } from "zod";
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -31,22 +32,19 @@ function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const { data: authData, error } = await loginUser({
-        email: data.email,
-        password: data.password,
-      });
+      const result = await loginAction(data);
 
-      if (error) {
-        setError("root", { message: error.message });
+      if (result.error) {
+        setError("root", { message: result.error });
         return;
       }
 
-      const userName =
-        authData.user?.user_metadata?.username || data.email.split("@")[0];
+      const userName = data.email.split("@")[0];
       setName(userName);
       setStoreEmail(data.email);
       setIsAuthenticated(true);
 
+      router.refresh();
       router.push("/");
     } catch (err) {
       console.error("Login error:", err);
