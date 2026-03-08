@@ -7,7 +7,7 @@ import Link from "next/link";
 import { registerSchema } from "../schemas";
 import { useRouter } from "next/navigation";
 import useProfileStore from "@/shared/store/useProfileStore";
-import { registerUser } from "@/shared/utils/auth/services/auth.service";
+import { registerAction } from "../actions";
 import type { z } from "zod";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -30,20 +30,17 @@ function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const { error } = await registerUser({
-        email: data.email,
-        password: data.password,
-        name: data.name,
-      });
+      const result = await registerAction(data);
 
-      if (error) {
-        setError("root", { message: error.message });
+      if (result.error) {
+        setError("root", { message: result.error });
         return;
       }
 
       setName(data.name);
       setStoreEmail(data.email);
       setIsAuthenticated(true);
+      router.refresh();
       router.push("/");
     } catch (err) {
       console.error("Registration error:", err);
