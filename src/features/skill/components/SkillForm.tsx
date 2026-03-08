@@ -1,9 +1,24 @@
 "use client";
 import React, { useState, useRef } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { skillSchema, type SkillFormData } from "../schemas/skill.schema";
+import { uploadSkillImage } from "../services/skill.service";
+import { createSkillAction } from "../actions";
 
 function SkillForm() {
-  const { register, handleSubmit, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<SkillFormData>({
+    resolver: zodResolver(skillSchema),
+    defaultValues: {
+      proficiencyLevel: "beginner",
+    },
+  });
   const [selectedLevel, setSelectedLevel] = useState<
     "beginner" | "intermediate" | "advanced"
   >("beginner");
@@ -13,21 +28,41 @@ function SkillForm() {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    setValue("image", file, { shouldValidate: true });
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
   }
-  const {
-    ref: registerRef,
-    onChange: registerOnChange,
-    ...rest
-  } = register("image");
+  const { ref: registerRef, ...rest } = register("image");
+
+  const onSubmit = async (data: SkillFormData) => {
+    try {
+      const imagePath = await uploadSkillImage(data.image);
+      if (!imagePath) {
+        setError("image", { message: "Failed to upload image" });
+        return;
+      }
+
+      const result = await createSkillAction({
+        skillTitle: data.skillTitle,
+        category: data.category,
+        language: data.language,
+        proficiencyLevel: data.proficiencyLevel,
+        skillDescription: data.skillDescription,
+        imagePath,
+      });
+
+      if (result.error) {
+        setError("root", { message: result.error });
+      }
+    } catch (error) {
+      console.error("Error creating skill:", error);
+      setError("root", {
+        message: "Failed to create skill. Please try again.",
+      });
+    }
+  };
   return (
-    <form
-      onSubmit={handleSubmit((data) => {
-        console.log(data);
-      })}
-      className="p-8 "
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="p-8 ">
       <div className="grid gap-2 mb-2">
         <label className="text-[#334155] font-bold text-sm" htmlFor="">
           Skill Title
@@ -93,7 +128,7 @@ function SkillForm() {
               className="flex-1 items-center justify-center text-center cursor-pointer"
               onClick={() => {
                 setSelectedLevel(level);
-                setValue("level", level);
+                setValue("proficiencyLevel", level);
               }}
             >
               <div
@@ -177,15 +212,19 @@ function SkillForm() {
             type="file"
             accept="image/png, image/jpeg"
             {...rest}
-            onChange={(e) => {
-              registerOnChange(e);
-              handleFileChange(e);
-            }}
+            onChange={handleFileChange}
           />
         </div>
       </div>
+      {errors.root && (
+        <p className="text-red-500 text-sm mt-4">{errors.root.message}</p>
+      )}
       <div className="flex gap-2 mt-8">
-        <button className="bg-[#2563EB] flex gap-2 items-center shadow-md rounded-[12px] px-5 py-3 text-white text-[16px] font-bold">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-[#2563EB] cursor-pointer flex gap-2 items-center shadow-md rounded-[12px] px-5 py-3 text-white text-[16px] font-bold disabled:opacity-60"
+        >
           <svg
             width="17"
             height="17"
@@ -200,7 +239,10 @@ function SkillForm() {
           </svg>
           Create Skill
         </button>
-        <button className="border border-[#E2E8F0] rounded-[12px] px-5 py-3 text-[#475569] text-[16px] font-bold">
+        <button
+          type="button"
+          className="border cursor-pointer border-[#E2E8F0] rounded-[12px] px-5 py-3 text-[#475569] text-[16px] font-bold"
+        >
           Cancel
         </button>
       </div>
