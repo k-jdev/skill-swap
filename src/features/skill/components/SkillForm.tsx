@@ -5,6 +5,14 @@ import { useForm } from "react-hook-form";
 import { skillSchema, type SkillFormData } from "../schemas/skill.schema";
 import { uploadSkillImage } from "../services/skill.service";
 import { createSkillAction } from "../actions";
+import {
+  SKILL_CATEGORIES,
+  SKILL_CATEGORY_GROUPS,
+} from "@/shared/constants/categories";
+import {
+  TEACHING_LANGUAGES,
+  TEACHING_LANGUAGE_GROUPS,
+} from "@/shared/constants/languages";
 
 function SkillForm() {
   const {
@@ -87,12 +95,20 @@ function SkillForm() {
             className="border border-[#E2E8F0] px-4 py-3 rounded-[12px] w-full appearance-none"
             name="category"
             id="category"
-            defaultValue={"Select Category"}
+            defaultValue=""
           >
-            {" "}
-            <option value="programming">Programming</option>
-            <option value="math">Math</option>
-            <option value="language">Language</option>
+            <option value="" disabled>
+              Select Category
+            </option>
+            {SKILL_CATEGORY_GROUPS.map((group) => (
+              <optgroup key={group} label={group}>
+                {SKILL_CATEGORIES.filter((c) => c.group === group).map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
           </select>
         </div>
         <div className="grid gap-2 flex-1">
@@ -109,10 +125,17 @@ function SkillForm() {
             id="language"
             defaultValue="english"
           >
-            {" "}
-            <option value="ukrainian">Ukrainian</option>
-            <option value="english">English</option>
-            <option value="german">German</option>
+            {TEACHING_LANGUAGE_GROUPS.map((group) => (
+              <optgroup key={group} label={group}>
+                {TEACHING_LANGUAGES.filter((l) => l.group === group).map(
+                  (l) => (
+                    <option key={l.value} value={l.value}>
+                      {l.label}
+                    </option>
+                  ),
+                )}
+              </optgroup>
+            ))}
           </select>
         </div>
       </div>
