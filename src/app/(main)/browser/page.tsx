@@ -1,9 +1,7 @@
-"use client";
-
 import React from "react";
 import {
   Header,
-  Card,
+  CardGrid,
   Search,
   SkillFilter,
 } from "@/features/browse/components";
@@ -14,11 +12,7 @@ export default function BrowserPage() {
       <Header />
       <Search />
       <SkillFilter />
-      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Card />
-        <Card />
-        <Card />
-      </div>
+      <CardGrid />
     </div>
   );
 }
