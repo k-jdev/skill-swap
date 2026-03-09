@@ -44,7 +44,7 @@ function Header() {
                 className="px-8 py-3 text-lg rounded-[24px] font-bold shadow-md max-w-[160px]"
               />
             </Link>
-            <Link href="/skill">
+            <Link href="/skill/create">
               {" "}
               <button className="text-gray-800 font-bold text-lg hover:text-primary transition-colors duration-200 flex items-center gap-2 cursor-pointer">
                 Offer Your Skills
