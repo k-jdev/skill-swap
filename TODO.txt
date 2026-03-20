@@ -1,3 +1,4 @@
 1. Create skill page
 2. Add reviews for skills in database
 3. Fix filters on browser page
+4. Profile page workings

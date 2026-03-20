@@ -1,6 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/shared/ui";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 interface CardProps {
   skill: {
     id: string;
@@ -28,9 +30,11 @@ function Card({ skill }: CardProps) {
       </div>
       <div className="p-4 gap-3 flex flex-col">
         <h3 className="text-2xl font-semibold text-black">
-          {skill.skill_title}
+          {skill.skill_title || <Skeleton width={150} />}
         </h3>
-        <p className="text-lg text-gray-500">{skill.description}</p>
+        <p className="text-lg text-gray-500">
+          {skill.description || <Skeleton count={3} />}
+        </p>
         <Button className="rounded-full font-medium" text="Connect" />
       </div>
     </div>
