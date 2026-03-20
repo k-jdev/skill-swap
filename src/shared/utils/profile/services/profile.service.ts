@@ -37,5 +37,19 @@ export async function updateProfile(
     console.error("Error while getting profile: ", error?.message);
     return null;
   }
-  // return data as ProfileParams;
+  return data;
+}
+
+export async function uploadAvatarImage(file: File, userId: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.storage
+    .from("avatar-images")
+    .upload(`public/${userId}`, file);
+
+  if (error) {
+    throw new Error(`Error uploading avatar: ${error.message}`);
+  }
+
+  return data;
 }
