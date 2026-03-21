@@ -6,6 +6,7 @@ import {
   updateProfile,
   getProfile,
 } from "@/shared/utils/profile/services/profile.service";
+import useProfileStore from "@/shared/store/useProfileStore";
 
 type Draft = {
   username: string;
@@ -29,6 +30,7 @@ function UserInfo({
   authName = "",
 }: Props) {
   const avatar = "";
+  const { setName, setTitle, setLocation, setBio } = useProfileStore();
 
   const [isEditing, setIsEditing] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
@@ -57,13 +59,19 @@ function UserInfo({
     });
 
     const fresh = await getProfile(userId);
-    setData({
+    console.log("Fresh profile data: ", fresh);
+    const next = {
       username: fresh?.username || draft.username,
       email: fresh?.email || draft.email,
       title: fresh?.skill ?? draft.title,
       location: fresh?.location ?? draft.location,
       bio: fresh?.description ?? draft.bio,
-    });
+    };
+    setData(next);
+    setName(next.username);
+    setTitle(next.title);
+    setLocation(next.location);
+    setBio(next.bio);
     setIsSaving(false);
     setIsEditing(false);
   }

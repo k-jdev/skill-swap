@@ -3,7 +3,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@/shared/ui";
-import useProfileStore from "@/shared/store/useProfileStore";
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
@@ -15,11 +14,6 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 function LoginForm() {
   const router = useRouter();
-  const {
-    setIsAuthenticated,
-    setName,
-    setEmail: setStoreEmail,
-  } = useProfileStore();
 
   const {
     register,
@@ -38,11 +32,6 @@ function LoginForm() {
         setError("root", { message: result.error });
         return;
       }
-
-      const userName = data.email.split("@")[0];
-      setName(userName);
-      setStoreEmail(data.email);
-      setIsAuthenticated(true);
 
       router.refresh();
       router.push("/");
