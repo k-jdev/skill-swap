@@ -4,7 +4,7 @@ import useSkillsStore from "@/shared/store/useSkillsStore";
 const skills = ["All", "Design", "Programming", "Marketing", "Business"];
 
 function SkillFilter() {
-  const { skillCategory, setSkillCategory }: any = useSkillsStore();
+  const { skillCategory, setSkillCategory } = useSkillsStore();
   return (
     <div className="flex space-x-4 mt-5 justify-center">
       {skills.map((skill) => (
