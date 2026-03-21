@@ -1,11 +1,11 @@
 import { createClient } from "@/shared/utils/supabase/client";
 
-interface ProfileParams {
-  name: string;
+export interface ProfileParams {
+  username: string;
   email: string;
   skill: string;
   description: string;
-  avatar?: string;
+  location?: string;
 }
 
 export async function getProfile(userId: string) {
@@ -31,10 +31,10 @@ export async function updateProfile(
   const supabase = createClient();
   const { data, error } = await supabase
     .from("profiles")
-    .update(profileData)
+    .upsert({ id: userId, ...profileData })
     .eq("id", userId);
   if (error) {
-    console.error("Error while getting profile: ", error?.message);
+    console.error("Error while updating profile: ", error?.message);
     return null;
   }
   return data;
