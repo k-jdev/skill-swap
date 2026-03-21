@@ -15,7 +15,7 @@ export async function getProfile(userId: string) {
     .from("profiles")
     .select("*")
     .eq("id", userId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error("Error while getting profile: ", error?.message);
