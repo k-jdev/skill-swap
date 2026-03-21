@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import useSkillsStore from "@/shared/store/useSkillsStore";
 function Search() {
-  const { setSkillTitle }: any = useSkillsStore();
+  const { setSkillTitle } = useSkillsStore();
   const [query, setQuery] = useState("");
 
   useEffect(() => {
