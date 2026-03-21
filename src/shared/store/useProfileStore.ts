@@ -1,5 +1,17 @@
 import { create } from "zustand";
-interface ProfileStore {
+
+export interface Review {
+  id: string;
+  profile_id: string;
+  author_id: string;
+  //delete under string
+  author_name: string;
+  rating: number;
+  content: string;
+  created_at: string;
+}
+
+export interface ProfileState {
   isAuthenticated: boolean;
   name: string;
   email: string;
@@ -7,29 +19,31 @@ interface ProfileStore {
   title: string;
   location: string;
   bio: string;
-  setIsAuthenticated: (value: boolean) => void;
-  setName: (name: string) => void;
-  setEmail: (email: string) => void;
-  setAvatar: (avatar: string) => void;
-  setTitle: (title: string) => void;
-  setLocation: (location: string) => void;
-  setBio: (bio: string) => void;
+  skills: string[];
+  reviews: Review[];
 }
-const useProfileStore = create<ProfileStore>((set) => ({
+
+interface ProfileStore extends ProfileState {
+  setProfile: (patch: Partial<ProfileState>) => void;
+  reset: () => void;
+}
+
+const initialState: ProfileState = {
+  isAuthenticated: false,
   name: "",
   email: "",
   avatar: "",
   title: "",
   location: "",
   bio: "",
-  isAuthenticated: false,
-  setName: (name: string) => set({ name }),
-  setEmail: (email: string) => set({ email }),
-  setAvatar: (avatar: string) => set({ avatar }),
-  setTitle: (title: string) => set({ title }),
-  setLocation: (location: string) => set({ location }),
-  setBio: (bio: string) => set({ bio }),
-  setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
+  skills: [],
+  reviews: [],
+};
+
+const useProfileStore = create<ProfileStore>((set) => ({
+  ...initialState,
+  setProfile: (patch) => set((state) => ({ ...state, ...patch })),
+  reset: () => set(initialState),
 }));
 
 export default useProfileStore;

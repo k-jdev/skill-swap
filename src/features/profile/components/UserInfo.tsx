@@ -30,7 +30,7 @@ function UserInfo({
   authName = "",
 }: Props) {
   const avatar = "";
-  const { setName, setTitle, setLocation, setBio } = useProfileStore();
+  const { setProfile } = useProfileStore();
 
   const [isEditing, setIsEditing] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
@@ -68,10 +68,7 @@ function UserInfo({
       bio: fresh?.description ?? draft.bio,
     };
     setData(next);
-    setName(next.username);
-    setTitle(next.title);
-    setLocation(next.location);
-    setBio(next.bio);
+    setProfile(next);
     setIsSaving(false);
     setIsEditing(false);
   }
