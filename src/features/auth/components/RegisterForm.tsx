@@ -14,11 +14,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 function RegisterForm() {
   const router = useRouter();
-  const {
-    setIsAuthenticated,
-    setName,
-    setEmail: setStoreEmail,
-  } = useProfileStore();
+  const { setProfile } = useProfileStore();
   const {
     register,
     handleSubmit,
@@ -37,9 +33,11 @@ function RegisterForm() {
         return;
       }
 
-      setName(data.name);
-      setStoreEmail(data.email);
-      setIsAuthenticated(true);
+      setProfile({
+        isAuthenticated: true,
+        avatar_url: "",
+        username: data.name,
+      });
       router.refresh();
       router.push("/");
     } catch (err) {

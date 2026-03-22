@@ -1,11 +1,11 @@
 import React from "react";
-
+import Link from "next/link";
 function Header() {
   return (
     <>
       {" "}
       <div className="mb-8">
-        <p className="flex items-center gap-2 text-[#64748B]">
+        <button className="flex items-center gap-2 text-[#64748B]">
           {" "}
           <svg
             width="11"
@@ -19,8 +19,10 @@ function Header() {
               fill="#64748B"
             />
           </svg>
-          Back to Dashboard
-        </p>
+          <Link href="/" className="ml-2">
+            Back to Dashboard
+          </Link>
+        </button>
       </div>
       <div className="flex-col ">
         <h2 className="text-[#0F172A] font-black text-3xl mb-2">

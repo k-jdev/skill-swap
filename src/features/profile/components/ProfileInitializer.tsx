@@ -22,11 +22,8 @@ export default function ProfileInitializer({
   useEffect(() => {
     setProfile({
       userId,
-      name: profile?.username ?? "",
-      email: profile?.email ?? "",
-      title: profile?.skill ?? "",
-      location: profile?.location ?? "",
-      bio: profile?.description ?? "",
+      username: profile?.username ?? "",
+      avatar_url: profile?.avatar_url ?? "",
       skills,
       reviews,
     });
