@@ -11,13 +11,8 @@ import {
 
 export default function NavBar() {
   console.log(getCurrentUser());
-  const { isAuthenticated, avatar, name, setIsAuthenticated } =
-    useProfileStore() as {
-      isAuthenticated: boolean;
-      avatar: string;
-      name: string;
-      setIsAuthenticated: (value: boolean) => void;
-    };
+  const { isAuthenticated, avatar_url, username, setProfile } =
+    useProfileStore();
   const [isHovered, setIsHovered] = useState(false);
   const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -69,15 +64,15 @@ export default function NavBar() {
               onMouseLeave={handleMouseLeave}
             >
               <Link href="/profile">
-                {avatar ? (
+                {avatar_url ? (
                   <img
-                    src={avatar}
+                    src={avatar_url}
                     alt="profile"
                     className="w-10 h-10 rounded-full object-cover cursor-pointer"
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold cursor-pointer">
-                    {name.charAt(0).toUpperCase()}
+                    {username.charAt(0).toUpperCase()}
                   </div>
                 )}
               </Link>
@@ -93,7 +88,11 @@ export default function NavBar() {
                     onClick={async () => {
                       const { error } = await logoutUser();
                       if (!error) {
-                        setIsAuthenticated(false);
+                        setProfile({
+                          isAuthenticated: false,
+                          avatar_url: "",
+                          username: "",
+                        });
                       }
                     }}
                   >

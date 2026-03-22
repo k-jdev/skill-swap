@@ -1,19 +1,21 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
 import type { ProfileParams } from "@/shared/utils/profile/services/profile.service";
 import {
   updateProfile,
-  getProfile,
+  uploadAvatarImage,
 } from "@/shared/utils/profile/services/profile.service";
 import useProfileStore from "@/shared/store/useProfileStore";
 
-type Draft = {
+type FormValues = {
+  avatar_url: string;
   username: string;
   email: string;
-  title: string;
+  skill: string;
   location: string;
-  bio: string;
+  description: string;
 };
 
 type Props = {
@@ -29,60 +31,71 @@ function UserInfo({
   authEmail = "",
   authName = "",
 }: Props) {
-  const avatar = "";
   const { setProfile } = useProfileStore();
 
   const [isEditing, setIsEditing] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
-  const [data, setData] = React.useState<Draft>({
-    username: initialData?.username || authName,
-    email: initialData?.email || authEmail,
-    title: initialData?.skill ?? "",
-    location: initialData?.location ?? "",
-    bio: initialData?.description ?? "",
-  });
-  const [draft, setDraft] = React.useState<Draft>(data);
+  const [isUploading, setIsUploading] = React.useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const { register, handleSubmit, reset, watch, setValue } =
+    useForm<FormValues>({
+      defaultValues: {
+        avatar_url: "",
+        skill: "",
+        location: "",
+        description: "",
+        ...(initialData ?? {}),
+        username: initialData?.username || authName,
+        email: initialData?.email || authEmail,
+      },
+    });
+
+  const avatarUrl = watch("avatar_url");
 
   function handleEdit() {
-    setDraft(data);
     setIsEditing(true);
     setProfile({ isEditing: true });
   }
 
-  async function handleSave() {
+  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const url = await uploadAvatarImage(file, userId);
+      setValue("avatar_url", url);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  async function onSubmit(formData: FormValues) {
     setIsSaving(true);
     await updateProfile(userId, {
-      username: draft.username,
-      email: draft.email,
-      skill: draft.title,
-      description: draft.bio,
-      location: draft.location,
+      username: formData.username,
+      email: formData.email,
+      skill: formData.skill,
+      description: formData.description,
+      location: formData.location,
+      avatar_url: formData.avatar_url,
     });
-
-    const fresh = await getProfile(userId);
-    console.log("Fresh profile data: ", fresh);
-    const next = {
-      username: fresh?.username || draft.username,
-      email: fresh?.email || draft.email,
-      title: fresh?.skill ?? draft.title,
-      location: fresh?.location ?? draft.location,
-      bio: fresh?.description ?? draft.bio,
-    };
-    setData(next);
-    setProfile(next);
-    setProfile({ isEditing: false });
+    reset(formData);
+    setProfile({
+      username: formData.username,
+      avatar_url: formData.avatar_url,
+      isEditing: false,
+    });
     setIsSaving(false);
     setIsEditing(false);
   }
 
   function handleCancel() {
+    reset();
     setIsEditing(false);
     setProfile({ isEditing: false });
-  }
-
-  function set(field: keyof Draft) {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setDraft((prev) => ({ ...prev, [field]: e.target.value }));
   }
 
   const inputCls =
@@ -91,10 +104,10 @@ function UserInfo({
   return (
     <div className="border-b-2 border-slate-200">
       <div className="p-10 flex gap-10">
-        <div className="shrink-0">
-          {avatar ? (
+        <div className="shrink-0 relative group">
+          {avatarUrl ? (
             <Image
-              src={avatar}
+              src={avatarUrl}
               alt="profile"
               width={300}
               height={300}
@@ -102,9 +115,48 @@ function UserInfo({
             />
           ) : (
             <div className="w-[300px] h-[300px] rounded-full bg-blue-500 flex items-center justify-center text-white text-7xl font-semibold select-none">
-              {(data.username || "?").charAt(0).toUpperCase()}
+              {(watch("username") || "?").charAt(0).toUpperCase()}
             </div>
           )}
+
+          {isEditing && (
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+              className="absolute inset-0 w-[300px] h-[300px] rounded-full flex flex-col items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity text-white gap-1 disabled:cursor-wait"
+            >
+              {isUploading ? (
+                <span className="text-sm">Uploading...</span>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                    <circle cx="12" cy="13" r="3" />
+                  </svg>
+                  <span className="text-xs font-medium">Change photo</span>
+                </>
+              )}
+            </button>
+          )}
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleAvatarChange}
+          />
         </div>
 
         <div className="flex flex-col gap-3 w-full">
@@ -116,8 +168,7 @@ function UserInfo({
                 </label>
                 <input
                   className={inputCls}
-                  value={draft.username}
-                  onChange={set("username")}
+                  {...register("username")}
                   placeholder="Your name"
                 />
               </div>
@@ -128,19 +179,17 @@ function UserInfo({
                 <input
                   className={inputCls}
                   type="email"
-                  value={draft.email}
-                  onChange={set("email")}
+                  {...register("email")}
                   placeholder="email@example.com"
                 />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-                  Title
+                  Skill
                 </label>
                 <input
                   className={inputCls}
-                  value={draft.title}
-                  onChange={set("title")}
+                  {...register("skill")}
                   placeholder="e.g., Product Designer"
                 />
               </div>
@@ -150,8 +199,7 @@ function UserInfo({
                 </label>
                 <input
                   className={inputCls}
-                  value={draft.location}
-                  onChange={set("location")}
+                  {...register("location")}
                   placeholder="e.g., Moscow"
                 />
               </div>
@@ -162,25 +210,26 @@ function UserInfo({
                 <textarea
                   className={`${inputCls} resize-none`}
                   rows={4}
-                  value={draft.bio}
-                  onChange={set("bio")}
+                  {...register("description")}
                   placeholder="Tell us about yourself..."
                 />
               </div>
             </>
           ) : (
             <>
-              <h2 className="text-5xl font-bold">{data.username || "—"}</h2>
-              <p className="text-slate-500 text-lg">{data.email}</p>
-              {data.title && (
-                <p className="text-slate-500 text-[20px]">{data.title}</p>
+              <h2 className="text-5xl font-bold">{watch("username") || "—"}</h2>
+              <p className="text-slate-500 text-lg">{watch("email")}</p>
+              {watch("skill") && (
+                <p className="text-slate-500 text-[20px]">{watch("skill")}</p>
               )}
-              {data.location && (
-                <p className="text-slate-400 text-[18px]">{data.location}</p>
+              {watch("location") && (
+                <p className="text-slate-400 text-[18px]">
+                  {watch("location")}
+                </p>
               )}
-              {data.bio && (
+              {watch("description") && (
                 <p className="mt-2 text-slate-500 max-w-2xl text-[18px]">
-                  {data.bio}
+                  {watch("description")}
                 </p>
               )}
             </>
@@ -192,7 +241,7 @@ function UserInfo({
         {isEditing ? (
           <>
             <button
-              onClick={handleSave}
+              onClick={handleSubmit(onSubmit)}
               disabled={isSaving}
               className="flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 active:bg-blue-800 disabled:opacity-60 disabled:cursor-not-allowed"
             >

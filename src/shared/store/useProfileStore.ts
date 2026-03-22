@@ -15,12 +15,8 @@ export interface ProfileState {
   isAuthenticated: boolean;
   isEditing: boolean;
   userId: string;
-  name: string;
-  email: string;
-  avatar: string;
-  title: string;
-  location: string;
-  bio: string;
+  username: string;
+  avatar_url: string;
   skills: string[];
   reviews: Review[];
 }
@@ -34,12 +30,8 @@ const initialState: ProfileState = {
   isAuthenticated: false,
   isEditing: false,
   userId: "",
-  name: "",
-  email: "",
-  avatar: "",
-  title: "",
-  location: "",
-  bio: "",
+  username: "",
+  avatar_url: "",
   skills: [],
   reviews: [],
 };

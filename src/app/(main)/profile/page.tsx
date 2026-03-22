@@ -19,7 +19,7 @@ export default async function ProfilePage() {
         ? supabase.from("profiles").select("*").eq("id", user.id).maybeSingle()
         : Promise.resolve({ data: null }),
       user
-        ? supabase.from("user_skills").select("name").eq("user_id", user.id)
+        ? supabase.from("skills").select("skill_title").eq("user_id", user.id)
         : Promise.resolve({ data: [] }),
       user
         ? supabase
@@ -35,7 +35,9 @@ export default async function ProfilePage() {
       <ProfileInitializer
         userId={user?.id ?? ""}
         profile={profile}
-        skills={(skills ?? []).map((s: { name: string }) => s.name)}
+        skills={(skills ?? []).map(
+          (s: { skill_title: string }) => s.skill_title,
+        )}
         reviews={reviews ?? []}
       />
       <UserInfo
