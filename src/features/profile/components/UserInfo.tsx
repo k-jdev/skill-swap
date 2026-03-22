@@ -46,6 +46,7 @@ function UserInfo({
   function handleEdit() {
     setDraft(data);
     setIsEditing(true);
+    setProfile({ isEditing: true });
   }
 
   async function handleSave() {
@@ -69,12 +70,14 @@ function UserInfo({
     };
     setData(next);
     setProfile(next);
+    setProfile({ isEditing: false });
     setIsSaving(false);
     setIsEditing(false);
   }
 
   function handleCancel() {
     setIsEditing(false);
+    setProfile({ isEditing: false });
   }
 
   function set(field: keyof Draft) {

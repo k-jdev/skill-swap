@@ -5,12 +5,14 @@ import type { ProfileParams } from "@/shared/utils/profile/services/profile.serv
 import type { Review } from "@/shared/store/useProfileStore";
 
 type Props = {
+  userId: string;
   profile: ProfileParams | null;
   skills: string[];
   reviews: Review[];
 };
 
 export default function ProfileInitializer({
+  userId,
   profile,
   skills,
   reviews,
@@ -19,6 +21,7 @@ export default function ProfileInitializer({
 
   useEffect(() => {
     setProfile({
+      userId,
       name: profile?.username ?? "",
       email: profile?.email ?? "",
       title: profile?.skill ?? "",

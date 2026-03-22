@@ -33,6 +33,7 @@ export default async function ProfilePage() {
   return (
     <div className="mx-[240px] mt-10 min-h-screen rounded-4xl bg-white shadow-md">
       <ProfileInitializer
+        userId={user?.id ?? ""}
         profile={profile}
         skills={(skills ?? []).map((s: { name: string }) => s.name)}
         reviews={reviews ?? []}
