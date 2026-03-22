@@ -13,6 +13,8 @@ export interface Review {
 
 export interface ProfileState {
   isAuthenticated: boolean;
+  isEditing: boolean;
+  userId: string;
   name: string;
   email: string;
   avatar: string;
@@ -30,6 +32,8 @@ interface ProfileStore extends ProfileState {
 
 const initialState: ProfileState = {
   isAuthenticated: false,
+  isEditing: false,
+  userId: "",
   name: "",
   email: "",
   avatar: "",
