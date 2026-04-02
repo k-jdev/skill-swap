@@ -2,9 +2,9 @@
 import React, { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { skillSchema, type SkillFormData } from "../schemas/skill.schema";
-import { uploadSkillImage } from "../../../shared/utils/skill/services/skill.service";
-import { createSkillAction } from "../actions";
+import { skillSchema, type SkillFormData } from "../../schemas/skill.schema";
+import { uploadSkillImage } from "../../../../shared/utils/skill/services/skill.service";
+import { createSkillAction } from "../../actions";
 import {
   SKILL_CATEGORIES,
   SKILL_CATEGORY_GROUPS,

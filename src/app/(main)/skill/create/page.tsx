@@ -1,6 +1,6 @@
 import { createMetadata } from "@/shared/lib/createMetadata";
-import Header from "@/features/skill/components/Header";
-import SkillForm from "@/features/skill/components/SkillForm";
+import Header from "@/features/skill/components/create/Header";
+import SkillForm from "@/features/skill/components/create/SkillForm";
 export const metadata = createMetadata("Create skill", "Creating a new skill");
 
 export default function SkillPage() {
