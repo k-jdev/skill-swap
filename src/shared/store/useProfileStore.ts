@@ -14,6 +14,8 @@ export interface Review {
 export interface ProfileState {
   isAuthenticated: boolean;
   isEditing: boolean;
+  email?: string;
+  name?: string;
   userId: string;
   username: string;
   avatar_url: string;
