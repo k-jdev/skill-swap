@@ -22,9 +22,9 @@ function SkillDetailHeader({ skillId }: { skillId: string }) {
       console.log("Error while fetching", e);
     });
   return (
-    <div className="w-full relative">
+    <div className="w-full relative mb-8">
       <Image
-        src={skill?.image_url || "/placeholder.png"}
+        src={skill?.image_url || "/images/skill/placeholder.png"}
         alt="Skill Image"
         width={1220}
         height={1080}
