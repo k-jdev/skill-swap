@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useState } from "react";
 import { getSkill } from "@/shared/utils/skill/services/skill.service";
 
 interface Skill {
@@ -13,14 +12,16 @@ interface Skill {
 
 function SkillDetailHeader({ skillId }: { skillId: string }) {
   const [skill, setSkill] = useState<Skill | null>(null);
-  getSkill(skillId)
-    .then((skill) => {
-      setSkill(skill);
-      console.log(skill);
-    })
-    .catch((e) => {
-      console.log("Error while fetching", e);
-    });
+
+  useEffect(() => {
+    getSkill(skillId)
+      .then((skill) => {
+        setSkill(skill);
+      })
+      .catch((e) => {
+        console.error("Error while fetching skill:", e);
+      });
+  }, [skillId]);
   return (
     <div className="w-full relative mb-8">
       <Image
