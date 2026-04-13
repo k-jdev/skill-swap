@@ -1,12 +1,5 @@
 import React from "react";
 
-export interface Review {
-  name: string;
-  imageUrl: string;
-  description: string;
-  time: number;
-  rating: number;
-}
 const reviewsData = [
   {
     id: 1,
@@ -69,13 +62,21 @@ function SkillDetailReviews() {
     </section>
   );
 }
-function Review({ time, name, imageUrl, description, rating }: Review) {
+interface ReviewProps {
+  name: string;
+  time: number;
+  imageUrl: string;
+  description: string;
+  rating: number;
+}
+
+function Review({ time, name, imageUrl, description, rating }: ReviewProps) {
   return (
     <div>
       <div className="flex justify-between items-center">
         <div className="flex gap-1 items-center">
           <img src={imageUrl} alt={name} />
-          <div className="flex-col">
+          <div className="flex flex-col">
             <p>{name}</p>
             <span>
               {Array.from({ length: rating }).map((_, index) => (

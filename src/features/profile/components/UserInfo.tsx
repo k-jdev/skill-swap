@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import type { ProfileParams } from "@/features/profile/api/profile.service";
+import { ProfileParams } from "@/entities";
 import {
   updateProfile,
   uploadAvatarImage,
