@@ -1,14 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { getSkill } from "@/shared/utils/skill/services/skill.service";
-
-interface Skill {
-  skill_title: string;
-  category: string;
-  image_url: string;
-  [key: string]: unknown;
-}
+import { getSkill } from "@/features/skill/api/skill.service";
+import { Skill } from "@/entities/skill/model";
 
 function SkillDetailHeader({ skillId }: { skillId: string }) {
   const [skill, setSkill] = useState<Skill | null>(null);

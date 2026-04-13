@@ -1,4 +1,4 @@
-import SkillDetail from "@/features/skill/components/detail";
+import { SkillDetail } from "@/features/skill";
 import { createMetadata } from "@/shared/lib/createMetadata";
 export const metadata = createMetadata("Skill Detail", "Viewing skill details");
 export default async function SkillPage({

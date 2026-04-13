@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import useProfileStore from "@/shared/store/useProfileStore";
-import type { Review } from "@/shared/store/useProfileStore";
+import useProfileStore from "@/features/profile/model/useProfileStore";
+import type { Review } from "@/features/profile/model/useProfileStore";
 
 function StarRating({ rating }: { rating: number }) {
   return (

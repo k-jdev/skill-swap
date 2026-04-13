@@ -1,8 +1,8 @@
 "use client";
 import { useEffect } from "react";
-import useProfileStore from "@/shared/store/useProfileStore";
-import type { ProfileParams } from "@/shared/utils/profile/services/profile.service";
-import type { Review } from "@/shared/store/useProfileStore";
+import useProfileStore from "@/features/profile/model/useProfileStore";
+
+import { Review, ProfileParams } from "@/entities";
 
 type Props = {
   userId: string;

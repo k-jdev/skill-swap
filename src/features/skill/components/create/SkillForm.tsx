@@ -3,7 +3,7 @@ import React, { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { skillSchema, type SkillFormData } from "../../schemas/skill.schema";
-import { uploadSkillImage } from "../../../../shared/utils/skill/services/skill.service";
+import { uploadSkillImage } from "../../api/skill.service";
 import { createSkillAction } from "../../actions";
 import {
   SKILL_CATEGORIES,
@@ -13,7 +13,7 @@ import {
   TEACHING_LANGUAGES,
   TEACHING_LANGUAGE_GROUPS,
 } from "@/shared/constants/languages";
-
+import { toast } from "sonner";
 import { ImageIcon, PlusIcon } from "./icons/Icons";
 
 function SkillForm() {
@@ -21,7 +21,7 @@ function SkillForm() {
     register,
     handleSubmit,
     setValue,
-    setError,
+
     formState: { errors, isSubmitting },
   } = useForm<SkillFormData>({
     resolver: zodResolver(skillSchema),
@@ -49,7 +49,8 @@ function SkillForm() {
     try {
       const imagePath = await uploadSkillImage(data.image);
       if (!imagePath) {
-        setError("image", { message: "Failed to upload image" });
+        toast.error("Failed to upload image");
+
         return;
       }
 
@@ -62,14 +63,14 @@ function SkillForm() {
         imagePath,
       });
 
-      if (result.error) {
-        setError("root", { message: result.error });
+      if (!result.success) {
+        toast.error(result.error);
+      } else {
+        toast.success("Skill created!");
       }
     } catch (error) {
       console.error("Error creating skill:", error);
-      setError("root", {
-        message: "Failed to create skill. Please try again.",
-      });
+      toast.error("Failed to create skill. Please try again.");
     }
   };
   return (

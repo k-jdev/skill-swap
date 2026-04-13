@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import useProfileStore from "@/shared/store/useProfileStore";
+import useProfileStore from "@/features/profile/model/useProfileStore";
 import { createClient } from "@/shared/utils/supabase/client";
 import { SKILL_CATEGORIES } from "@/shared/constants/categories";
 

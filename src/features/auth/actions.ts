@@ -2,16 +2,16 @@
 
 import { loginSchema, registerSchema } from "@/features/auth/schemas";
 import { createClient } from "@/shared/utils/supabase/server";
-
+import { ActionResult } from "@/shared/types/action";
 import type { z } from "zod";
 
 type LoginFormData = z.infer<typeof loginSchema>;
 type RegisterFormData = z.infer<typeof registerSchema>;
 
-export async function loginAction(data: LoginFormData) {
+export async function loginAction(data: LoginFormData): Promise<ActionResult> {
   const parsed = loginSchema.safeParse(data);
   if (!parsed.success) {
-    return { error: "Invalid data" };
+    return { success: false, error: "Invalid data" };
   }
 
   const supabase = await createClient();
@@ -19,14 +19,16 @@ export async function loginAction(data: LoginFormData) {
     email: parsed.data.email,
     password: parsed.data.password,
   });
-  if (error) return { error: error.message };
-  return { error: null };
+  if (error) return { success: false, error: error.message };
+  return { success: true, data: undefined };
 }
 
-export async function registerAction(data: RegisterFormData) {
+export async function registerAction(
+  data: RegisterFormData,
+): Promise<ActionResult> {
   const parsed = registerSchema.safeParse(data);
   if (!parsed.success) {
-    return { error: "Invalid data" };
+    return { success: false, error: "Invalid data" };
   }
   const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
@@ -38,6 +40,6 @@ export async function registerAction(data: RegisterFormData) {
       },
     },
   });
-  if (error) return { error: error.message };
-  return { error: null };
+  if (error) return { success: false, error: error.message };
+  return { success: true, data: undefined };
 }

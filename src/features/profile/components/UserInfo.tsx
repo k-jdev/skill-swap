@@ -2,12 +2,12 @@
 import React from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import type { ProfileParams } from "@/shared/utils/profile/services/profile.service";
+import type { ProfileParams } from "@/features/profile/api/profile.service";
 import {
   updateProfile,
   uploadAvatarImage,
-} from "@/shared/utils/profile/services/profile.service";
-import useProfileStore from "@/shared/store/useProfileStore";
+} from "@/features/profile/api/profile.service";
+import useProfileStore from "@/features/profile/model/useProfileStore";
 
 type FormValues = {
   avatar_url: string;

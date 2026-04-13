@@ -4,23 +4,16 @@ import { Button } from "@/shared/ui";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Link from "next/link";
+import { Skill } from "@/entities";
 interface CardProps {
-  skill: {
-    id: string;
-    skill_title: string;
-    description: string;
-    image_url: string;
-    category: string;
-    language: string;
-    proficiency_level: string;
-  };
+  skill: Skill;
 }
 
 function Card({ skill }: CardProps) {
   return (
-    <Link href={`/skill/${skill.id}`} className="block">
+    <>
       {" "}
-      <div className="bg-white border border-gray-200 rounded-2xl hover:shadow-lg max-w-[330px] transition duration-300 cursor-pointer overflow-hidden">
+      <div className="bg-white border border-gray-200 rounded-2xl hover:shadow-lg max-w-[330px] transition duration-300  overflow-hidden">
         <div className="relative">
           <Image
             src={skill.image_url}
@@ -38,10 +31,12 @@ function Card({ skill }: CardProps) {
           <p className="text-lg text-gray-500">
             {skill.description || <Skeleton count={3} />}
           </p>
-          <Button className="rounded-full font-medium" text="Connect" />
+          <Link href={`/skill/${skill.id}`} className="block">
+            <Button className="rounded-full font-medium" text="Connect" />
+          </Link>
         </div>
       </div>
-    </Link>
+    </>
   );
 }
 
