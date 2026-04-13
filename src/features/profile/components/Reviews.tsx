@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 import useProfileStore from "@/features/profile/model/useProfileStore";
-import type { Review } from "@/features/profile/model/useProfileStore";
-
+import { Review } from "@/entities";
 function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5">

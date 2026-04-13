@@ -4,7 +4,7 @@ import Image from "next/image";
 import NavButtons from "./NavButtons";
 import Link from "next/link";
 import useProfileStore from "../../features/profile/model/useProfileStore";
-import { logoutUser, getCurrentUser } from "@/features/auth/api/auth.service";
+import { logoutUser } from "@/features/auth/api/auth.service";
 
 export default function NavBar() {
   const { isAuthenticated, avatar_url, username, setProfile } =
