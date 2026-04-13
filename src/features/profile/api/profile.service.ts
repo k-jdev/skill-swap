@@ -1,13 +1,5 @@
 import { createClient } from "@/shared/utils/supabase/client";
-
-export interface ProfileParams {
-  username: string;
-  email: string;
-  skill: string;
-  description: string;
-  location?: string;
-  avatar_url?: string;
-}
+import { ProfileParams } from "@/entities/profile/model";
 
 export async function getProfile(userId: string) {
   const supabase = createClient();

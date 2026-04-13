@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { createClient } from "@/shared/utils/supabase/client";
-import useProfileStore from "@/shared/store/useProfileStore";
+import useProfileStore from "@/features/profile/model/useProfileStore";
 
 export function AuthInitializer() {
   const { setProfile, reset } = useProfileStore();

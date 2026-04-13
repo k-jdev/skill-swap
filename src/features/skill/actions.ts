@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/shared/utils/supabase/server";
+import { ActionResult } from "@/shared/types/action";
 import * as z from "zod";
 
 const createSkillPayloadSchema = z.object({
@@ -14,10 +15,12 @@ const createSkillPayloadSchema = z.object({
 
 type CreateSkillPayload = z.infer<typeof createSkillPayloadSchema>;
 
-export async function createSkillAction(payload: CreateSkillPayload) {
+export async function createSkillAction(
+  payload: CreateSkillPayload,
+): Promise<ActionResult> {
   const parsed = createSkillPayloadSchema.safeParse(payload);
   if (!parsed.success) {
-    return { error: "Invalid data" };
+    return { success: false, error: "Invalid data" };
   }
 
   const supabase = await createClient();
@@ -25,7 +28,7 @@ export async function createSkillAction(payload: CreateSkillPayload) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "Unauthorized" };
+  if (!user) return { success: false, error: "Unauthorized" };
 
   const { error } = await supabase.from("skills").insert({
     user_id: user.id,
@@ -37,6 +40,6 @@ export async function createSkillAction(payload: CreateSkillPayload) {
     image_url: parsed.data.imagePath,
   });
 
-  if (error) return { error: error.message };
-  return { error: null };
+  if (error) return { success: false, error: error.message };
+  return { success: true, data: undefined };
 }

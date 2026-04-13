@@ -7,6 +7,7 @@ import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
 import { loginAction } from "../actions";
+import { toast } from "sonner";
 
 import type { z } from "zod";
 
@@ -18,7 +19,7 @@ function LoginForm() {
   const {
     register,
     handleSubmit,
-    setError,
+
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -28,8 +29,9 @@ function LoginForm() {
     try {
       const result = await loginAction(data);
 
-      if (result.error) {
-        setError("root", { message: result.error });
+      if (!result.success) {
+        toast.error(result.error);
+
         return;
       }
 
@@ -37,7 +39,7 @@ function LoginForm() {
       router.push("/");
     } catch (err) {
       console.error("Login error:", err);
-      setError("root", { message: "Server error, please try again" });
+      toast.error("Server error, please try again");
     }
   };
 

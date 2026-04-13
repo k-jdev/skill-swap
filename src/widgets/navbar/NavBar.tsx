@@ -3,14 +3,10 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import NavButtons from "./NavButtons";
 import Link from "next/link";
-import useProfileStore from "../store/useProfileStore";
-import {
-  logoutUser,
-  getCurrentUser,
-} from "@/shared/utils/auth/services/auth.service";
+import useProfileStore from "../../features/profile/model/useProfileStore";
+import { logoutUser, getCurrentUser } from "@/features/auth/api/auth.service";
 
 export default function NavBar() {
-  console.log(getCurrentUser());
   const { isAuthenticated, avatar_url, username, setProfile } =
     useProfileStore();
   const [isHovered, setIsHovered] = useState(false);

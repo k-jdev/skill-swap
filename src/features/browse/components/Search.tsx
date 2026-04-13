@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import useSkillsStore from "@/shared/store/useSkillsStore";
+// import useSkillsStore from "@/features/skill/model/useSkillsStore";
 function Search() {
-  const { setSkillTitle } = useSkillsStore();
+  const [, setSkillTitle] = useState("");
   const [query, setQuery] = useState("");
 
   useEffect(() => {
