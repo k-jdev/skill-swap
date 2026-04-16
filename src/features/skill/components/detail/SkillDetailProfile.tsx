@@ -1,8 +1,7 @@
 import React from "react";
 import Image from "next/image";
-type Props = {};
 
-function SkillDetailProfile({}: Props) {
+function SkillDetailProfile() {
   const status = true;
   return (
     <div className="rounded-[16px] p-8 bg-white shadow-md w-full">
