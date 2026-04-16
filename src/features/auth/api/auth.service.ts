@@ -1,15 +1,15 @@
 import { createClient } from "@/shared/utils/supabase/client";
 
-interface LoginParams {
-  email: string;
-  password: string;
-}
+// interface LoginParams {
+//   email: string;
+//   password: string;
+// }
 
-interface RegisterParams {
-  email: string;
-  password: string;
-  name: string;
-}
+// interface RegisterParams {
+//   email: string;
+//   password: string;
+//   name: string;
+// }
 
 export async function logoutUser() {
   const supabase = createClient();
