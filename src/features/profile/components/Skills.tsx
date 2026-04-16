@@ -3,7 +3,7 @@ import React from "react";
 import useProfileStore from "@/features/profile/model/useProfileStore";
 import { createClient } from "@/shared/utils/supabase/client";
 import { SKILL_CATEGORIES } from "@/shared/constants/categories";
-
+import { toast } from "sonner";
 function Skills() {
   const { skills, isEditing, userId, setProfile } = useProfileStore();
   const [selected, setSelected] = React.useState(
@@ -28,8 +28,14 @@ function Skills() {
       .delete()
       .eq("user_id", userId)
       .eq("skill_title", skill);
-    if (!error) {
-      setProfile({ skills: skills.filter((s) => s !== skill) });
+    if (error) {
+      toast.error("Failed to delete skill");
+      console.log(error);
+    } else {
+      setProfile({
+        skills: skills.filter((s) => s !== skill),
+      });
+      toast.success("Skill removed");
     }
   }
 

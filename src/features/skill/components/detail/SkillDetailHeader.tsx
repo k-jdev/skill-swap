@@ -22,8 +22,8 @@ function SkillDetailHeader({ skillId }: { skillId: string }) {
         src={skill?.image_url || "/images/skill/placeholder.png"}
         alt="Skill Image"
         width={1220}
-        height={1080}
-        className="w-full h-70% object-contain rounded-2xl"
+        height={420}
+        className="w-full h-120 object-cover rounded-2xl"
       />
       <div className="absolute bottom-6 left-6 flex flex-col gap-3">
         <div className="flex gap-2">

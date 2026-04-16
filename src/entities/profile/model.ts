@@ -1,14 +1,4 @@
-export interface Review {
-  id: string;
-  profile_id: string;
-  author_id: string;
-  //delete under string
-  author_name: string;
-  rating: number;
-  content: string;
-  created_at: string;
-}
-
+import { Review } from "../review/model";
 export interface ProfileState {
   isAuthenticated: boolean;
   isEditing: boolean;
@@ -24,7 +14,7 @@ export interface ProfileState {
 export interface ProfileParams {
   username: string;
   email: string;
-  skill: string;
+
   description: string;
   location?: string;
   avatar_url?: string;

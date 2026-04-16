@@ -13,7 +13,7 @@ type FormValues = {
   avatar_url: string;
   username: string;
   email: string;
-  skill: string;
+
   location: string;
   description: string;
 };
@@ -42,7 +42,7 @@ function UserInfo({
     useForm<FormValues>({
       defaultValues: {
         avatar_url: "",
-        skill: "",
+
         location: "",
         description: "",
         ...(initialData ?? {}),
@@ -77,7 +77,7 @@ function UserInfo({
     await updateProfile(userId, {
       username: formData.username,
       email: formData.email,
-      skill: formData.skill,
+
       description: formData.description,
       location: formData.location,
       avatar_url: formData.avatar_url,
@@ -183,7 +183,7 @@ function UserInfo({
                   placeholder="email@example.com"
                 />
               </div>
-              <div className="flex flex-col gap-1">
+              {/* <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
                   Skill
                 </label>
@@ -192,7 +192,7 @@ function UserInfo({
                   {...register("skill")}
                   placeholder="e.g., Product Designer"
                 />
-              </div>
+              </div> */}
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
                   Location
@@ -219,9 +219,7 @@ function UserInfo({
             <>
               <h2 className="text-5xl font-bold">{watch("username") || "—"}</h2>
               <p className="text-slate-500 text-lg">{watch("email")}</p>
-              {watch("skill") && (
-                <p className="text-slate-500 text-[20px]">{watch("skill")}</p>
-              )}
+
               {watch("location") && (
                 <p className="text-slate-400 text-[18px]">
                   {watch("location")}
