@@ -2,16 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "@/features/browse/components";
 import { getSkillAction } from "../actions";
-import useSkillsStore from "@/shared/store/useSkillsStore";
+import { Skill } from "@/entities";
 
 function CardGrid() {
-  const { skillTitle, skillCategory }: any = useSkillsStore();
-  const [skills, setSkills] = useState<any[]>([]);
+  const [skillTitle] = useState<string>("");
+  const [skillCategory] = useState<string>("");
+  const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
     getSkillAction(skillCategory, skillTitle).then((result) => {
-      if (result && !("error" in result)) {
-        setSkills(result);
+      if (result.success) {
+        setSkills(result.data);
       }
     });
   }, [skillTitle, skillCategory]);

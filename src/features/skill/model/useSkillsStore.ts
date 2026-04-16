@@ -1,6 +1,13 @@
 import { create } from "zustand";
 
-const useSkillsStore = create((set) => ({
+type SkillsStore = {
+  skillTitle: string;
+  skillCategory: string;
+  setSkillTitle: (skillTitle: string) => void;
+  setSkillCategory: (skillCategory: string) => void;
+};
+
+const useSkillsStore = create<SkillsStore>((set) => ({
   skillTitle: "",
   skillCategory: "",
   setSkillTitle: (skillTitle: string) => set({ skillTitle }),

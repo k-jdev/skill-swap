@@ -6,23 +6,20 @@ import { Button, Input } from "@/shared/ui";
 import Link from "next/link";
 import { registerSchema } from "../schemas";
 import { useRouter } from "next/navigation";
-import useProfileStore from "@/shared/store/useProfileStore";
+import useProfileStore from "@/features/profile/model/useProfileStore";
 import { registerAction } from "../actions";
+import { toast } from "sonner";
 import type { z } from "zod";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 function RegisterForm() {
   const router = useRouter();
-  const {
-    setIsAuthenticated,
-    setName,
-    setEmail: setStoreEmail,
-  } = useProfileStore();
+  const { setProfile } = useProfileStore();
   const {
     register,
     handleSubmit,
-    setError,
+
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -32,19 +29,22 @@ function RegisterForm() {
     try {
       const result = await registerAction(data);
 
-      if (result.error) {
-        setError("root", { message: result.error });
+      if (!result.success) {
+        toast.error(result.error);
+
         return;
       }
 
-      setName(data.name);
-      setStoreEmail(data.email);
-      setIsAuthenticated(true);
+      setProfile({
+        isAuthenticated: true,
+        avatar_url: "",
+        username: data.name,
+      });
       router.refresh();
       router.push("/");
     } catch (err) {
       console.error("Registration error:", err);
-      setError("root", { message: "Server error, please try again" });
+      toast.error("Server error, please try again");
     }
   };
 

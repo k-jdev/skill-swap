@@ -1,6 +1,5 @@
 import React from "react";
-import LoginForm from "@/features/auth/components/LoginForm";
-import HeaderBlock from "@/features/auth/components/HeaderBlock";
+import { LoginForm, HeaderBlock } from "@/features/auth";
 
 export default function LoginPage() {
   return (
