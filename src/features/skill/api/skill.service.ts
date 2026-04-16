@@ -21,3 +21,20 @@ export async function uploadSkillImage(file: File): Promise<string | null> {
 
   return urlData.publicUrl;
 }
+
+export async function getSkill(skillId: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("skills")
+    .select("*")
+    .eq("id", skillId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to fetch skill:", error.message);
+    return null;
+  }
+
+  return data;
+}
