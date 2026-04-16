@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f6f7f8] text-black`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen mb-10 bg-[#f6f7f8] text-black`}
       >
         <AuthInitializer />
         <Toaster position="bottom-right" />

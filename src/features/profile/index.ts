@@ -15,8 +15,4 @@ export {
 } from "./api/profile.service";
 
 // types
-export type {
-  ProfileState,
-  Review,
-  ProfileParams,
-} from "@/entities/profile/model";
+export type { ProfileState, ProfileParams } from "@/entities/profile/model";
