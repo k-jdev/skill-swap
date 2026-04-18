@@ -6,7 +6,7 @@ export async function getProfile(userId: string) {
 
   const { data, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("*, reviews(*, author:author_id (username, avatar_url))")
     .eq("id", userId)
     .maybeSingle();
 
@@ -14,6 +14,7 @@ export async function getProfile(userId: string) {
     console.error("Error while getting profile: ", error?.message);
     return null;
   }
+  console.log("Profile data:", data);
   return data as ProfileParams | null;
 }
 
