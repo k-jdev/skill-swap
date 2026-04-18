@@ -42,8 +42,11 @@ function SkillDetailReviews() {
         <h2 className="text-[#0F172A] text-2xl font-bold">Reviews & Ratings</h2>
         <div className="flex gap-1">
           <StarIcon />
-          <p className="text-[#137FEC] font-bold">4.9</p>
-          <p className="text-[#94A3B8]">(120 reviews)</p>
+          <p className="text-[#137FEC] font-bold">
+            {reviewsData.reduce((acc, val) => acc + val.rating, 0) /
+              reviewsData.length}
+          </p>
+          <p className="text-[#94A3B8]">({reviewsData.length} reviews)</p>
         </div>
       </div>
       {reviewsData.map((review) => (
@@ -56,9 +59,16 @@ function SkillDetailReviews() {
           rating={review.rating}
         />
       ))}
-      <button className="text-[#137FEC] text-[16px] mt-10 font-bold">
-        View all reviews
-      </button>
+      <div className="flex gap-2 items-center mt-10">
+        {" "}
+        <button className="text-[#137FEC] text-[16px]  font-bold">
+          View all reviews
+        </button>{" "}
+        <p className="">or</p>
+        <button className="text-[#137FEC] text-[16px]  font-bold">
+          Send your review
+        </button>
+      </div>
     </section>
   );
 }

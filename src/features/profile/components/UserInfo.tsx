@@ -32,7 +32,8 @@ function UserInfo({
   authName = "",
 }: Props) {
   const { setProfile } = useProfileStore();
-
+  console.log("initialData:", initialData);
+  console.log("userId:", userId);
   const [isEditing, setIsEditing] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
