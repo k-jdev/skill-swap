@@ -19,7 +19,7 @@ function ExchangeIcon() {
 
 export default function SkillDetailBuy() {
   return (
-    <aside className="rounded-[16px] p-8 bg-white shadow-md w-full max-w-md">
+    <aside className="rounded-[16px] p-8 bg-white shadow-md w-full">
       <div className="flex flex-col gap-6">
         <div>
           <p className="text-[#94A3B8] text-sm font-semibold tracking-wider">

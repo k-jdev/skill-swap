@@ -6,8 +6,7 @@ import { Button, Input } from "@/shared/ui";
 import Link from "next/link";
 import { registerSchema } from "../schemas";
 import { useRouter } from "next/navigation";
-import useProfileStore from "@/features/profile/model/useProfileStore";
-import { registerAction } from "../actions";
+import { createClient } from "@/shared/utils/supabase/client";
 import { toast } from "sonner";
 import type { z } from "zod";
 
@@ -15,7 +14,6 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 function RegisterForm() {
   const router = useRouter();
-  const { setProfile } = useProfileStore();
   const {
     register,
     handleSubmit,
@@ -27,20 +25,18 @@ function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const result = await registerAction(data);
+      const supabase = createClient();
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: { data: { username: data.name } },
+      });
 
-      if (!result.success) {
-        toast.error(result.error);
-
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      setProfile({
-        isAuthenticated: true,
-        avatar_url: "",
-        username: data.name,
-      });
-      router.refresh();
       router.push("/");
     } catch (err) {
       console.error("Registration error:", err);
