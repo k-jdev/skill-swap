@@ -6,7 +6,7 @@ import { Button, Input } from "@/shared/ui";
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
-import { loginAction } from "../actions";
+import { createClient } from "@/shared/utils/supabase/client";
 import { toast } from "sonner";
 
 import type { z } from "zod";
@@ -27,15 +27,17 @@ function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const result = await loginAction(data);
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
 
-      if (!result.success) {
-        toast.error(result.error);
-
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      router.refresh();
       router.push("/");
     } catch (err) {
       console.error("Login error:", err);
