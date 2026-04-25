@@ -22,7 +22,7 @@ export async function uploadSkillImage(file: File): Promise<string | null> {
   return urlData.publicUrl;
 }
 
-export async function getSkill(skillId: string) {
+export async function getSkill(skillId: string | number) {
   const supabase = createClient();
 
   const { data, error } = await supabase
