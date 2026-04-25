@@ -6,6 +6,14 @@ import { addReview } from "@/entities/review/review.service";
 import { useProfileStore } from "@/features/profile";
 import { createClient } from "@/shared/utils/supabase/client";
 
+interface ReviewProps {
+  name: string;
+  time: number;
+  imageUrl: string;
+  description: string;
+  rating: number;
+}
+
 const reviewsData = [
   {
     id: 1,
@@ -24,7 +32,8 @@ const reviewsData = [
     rating: 4,
   },
 ];
-export function StarIcon({ filled }: { filled?: boolean; className?: string }) {
+
+export function StarIcon({ filled }: { filled?: boolean }) {
   return (
     <svg
       width="20"
@@ -40,12 +49,14 @@ export function StarIcon({ filled }: { filled?: boolean; className?: string }) {
     </svg>
   );
 }
+
 type ReviewModalProps = {
   isOpen: boolean;
   onClose: () => void;
   skillId: number;
   skillOwnerId: number;
 };
+
 function ReviewModal({
   onClose,
   isOpen,
@@ -65,10 +76,10 @@ function ReviewModal({
     const currentUserId = user?.id ?? userId;
     await addReview(currentUserId, skillOwnerId, skillId, content, rating);
   }
+
   return (
     <Modal title="Send your review" onClose={onClose} isOpen={isOpen}>
       <div className="grid gap-2">
-        {" "}
         <span className="flex gap-1">
           {Array.from({ length: 5 }).map((_, index) => {
             const starValue = index + 1;
@@ -108,8 +119,8 @@ function SkillDetailReviews({
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <section className="bg-white  rounded-lg p-8 shadow-md">
-      <div className="flex  justify-between">
+    <section className="bg-white rounded-lg p-8 shadow-md">
+      <div className="flex justify-between">
         <h2 className="text-[#0F172A] text-2xl font-bold">Reviews & Ratings</h2>
         <div className="flex gap-1">
           <StarIcon filled={true} />
@@ -131,16 +142,13 @@ function SkillDetailReviews({
         />
       ))}
       <div className="flex gap-2 items-center mt-10">
-        {" "}
-        <button className="text-[#137FEC] text-[16px]  font-bold">
+        <button className="text-[#137FEC] text-[16px] font-bold">
           View all reviews
-        </button>{" "}
-        <p className="">or</p>
+        </button>
+        <p>or</p>
         <button
-          onClick={() => {
-            setIsOpen(true);
-          }}
-          className="text-[#137FEC] text-[16px]  font-bold"
+          onClick={() => setIsOpen(true)}
+          className="text-[#137FEC] text-[16px] font-bold"
         >
           Send your review
         </button>
@@ -153,13 +161,6 @@ function SkillDetailReviews({
       />
     </section>
   );
-}
-interface ReviewProps {
-  name: string;
-  time: number;
-  imageUrl: string;
-  description: string;
-  rating: number;
 }
 
 function Review({ time, name, imageUrl, description, rating }: ReviewProps) {
