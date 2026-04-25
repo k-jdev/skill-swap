@@ -2,7 +2,7 @@ import { createClient } from "@/shared/utils/supabase/client";
 import { Review } from "./model";
 
 export async function addReview(
-  userId: string,
+  authorId: string,
   profileId: number,
   skillId: number,
   content: string,
@@ -11,7 +11,7 @@ export async function addReview(
   const supabase = createClient();
 
   const { error } = await supabase.from("reviews").insert({
-    author_id: userId,
+    author_id: authorId,
     profile_id: profileId,
     content: content,
     rating: rating,
@@ -21,13 +21,34 @@ export async function addReview(
   return { error };
 }
 
+export async function updateReview(
+  id: string,
+  content: string,
+  rating: number,
+): Promise<Review> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("reviews")
+    .update({ content: content, rating: rating })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error("Failed to update review");
+  }
+
+  return data;
+}
+
 export async function getReview(skillId: number) {
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from("reviews")
     .select("*")
-    .eq("id", skillId);
+    .eq("skill_id", skillId);
 
   if (error) {
     console.error("Failed to fetch review:", error.message);

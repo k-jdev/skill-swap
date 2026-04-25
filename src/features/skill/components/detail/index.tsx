@@ -11,12 +11,12 @@ async function SkillDetail({ skillId }: { skillId: number }) {
   return (
     <section>
       <SkillDetailHeader skillId={skillId} />
-      <div className="flex gap-8 ">
-        <div className="grid gap-8 ">
+      <div className="flex gap-8 items-start">
+        <div className="grid gap-8 flex-2">
           <SkillDetailAbout />
           <SkillDetailReviews skillId={skillId} skillOwnerId={skill?.user_id} />
         </div>
-        <div className="flex flex-col w-[360px] shrink-0">
+        <div className="flex flex-col flex-1  shrink-0">
           <div className="mb-6">
             <SkillDetailBuy />
           </div>

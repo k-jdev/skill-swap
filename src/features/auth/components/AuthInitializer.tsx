@@ -13,7 +13,12 @@ export function AuthInitializer() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
-        setProfile({ isAuthenticated: true });
+        setProfile({
+          isAuthenticated: true,
+          userId: session.user.id,
+          username: session.user.user_metadata?.username ?? "",
+          avatar_url: session.user.user_metadata?.avatar_url ?? "",
+        });
       } else {
         reset();
       }
