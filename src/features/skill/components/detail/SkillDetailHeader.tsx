@@ -4,7 +4,7 @@ import Image from "next/image";
 import { getSkill } from "@/features/skill/api/skill.service";
 import { Skill } from "@/entities/skill/model";
 
-function SkillDetailHeader({ skillId }: { skillId: string }) {
+function SkillDetailHeader({ skillId }: { skillId: number }) {
   const [skill, setSkill] = useState<Skill | null>(null);
 
   useEffect(() => {
