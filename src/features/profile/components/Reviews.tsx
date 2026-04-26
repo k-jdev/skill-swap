@@ -20,14 +20,28 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 function ReviewCard({ review }: { review: Review }) {
+  const author = Array.isArray(review.author)
+    ? (review.author[0] ?? null)
+    : review.author;
+  const displayName = author?.username || review.author_name || "User";
+  const avatarUrl = author?.avatar_url || "";
+
   return (
     <div className="mt-10 flex-col gap-6">
       <div className="flex gap-4">
-        <div className="w-[50px] h-[50px] rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold text-lg select-none shrink-0">
-          {review.author_name.charAt(0).toUpperCase()}
-        </div>
+        {avatarUrl ? (
+          <img
+            className="w-[50px] h-[50px] rounded-full object-cover shrink-0"
+            src={avatarUrl}
+            alt={displayName}
+          />
+        ) : (
+          <div className="w-[50px] h-[50px] rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold text-lg select-none shrink-0">
+            {displayName.charAt(0).toUpperCase()}
+          </div>
+        )}
         <div>
-          <h3 className="text-xl text-black">{review.author_name}</h3>
+          <h3 className="text-xl text-black">{displayName}</h3>
           <p className="text-slate-500">
             {new Date(review.created_at).toLocaleDateString()}
           </p>

@@ -194,7 +194,7 @@ function SkillDetailReviews({
             <Review
               key={review.id}
               name={review.author?.username || "User"}
-              time={dayjs(review.created_at).format("HH:mm")}
+              time={new Date(review.created_at).toLocaleDateString()}
               imageUrl={review.author?.avatar_url || ""}
               description={review.content}
               rating={review.rating}
