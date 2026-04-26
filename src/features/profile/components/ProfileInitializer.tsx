@@ -27,7 +27,7 @@ export default function ProfileInitializer({
       skills,
       reviews,
     });
-  });
+  }, []);
 
   return null;
 }

@@ -22,7 +22,7 @@ export async function uploadSkillImage(file: File): Promise<string | null> {
   return urlData.publicUrl;
 }
 
-export async function getSkill(skillId: string) {
+export async function getSkill(skillId: string | number) {
   const supabase = createClient();
 
   const { data, error } = await supabase
@@ -37,4 +37,23 @@ export async function getSkill(skillId: string) {
   }
 
   return data;
+}
+export async function addSkill(userId: string, skillTitle: string) {
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("skills")
+    .insert({ user_id: userId, skill_title: skillTitle });
+  return { error };
+}
+
+export async function removeSkill(userId: string, skillTitle: string) {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from("skills")
+    .delete()
+    .eq("user_id", userId)
+    .eq("skill_title", skillTitle);
+
+  return { error };
 }
