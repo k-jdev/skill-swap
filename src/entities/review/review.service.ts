@@ -3,7 +3,7 @@ import { Review } from "./model";
 
 export async function addReview(
   authorId: string,
-  profileId: number,
+  profileId: string,
   skillId: number,
   content: string,
   rating: number,
@@ -47,8 +47,11 @@ export async function getReview(skillId: number) {
 
   const { data, error } = await supabase
     .from("reviews")
-    .select("*")
-    .eq("skill_id", skillId);
+    .select(
+      "id, content, rating, created_at, author:author_id (username, avatar_url)",
+    )
+    .eq("skill_id", skillId)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Failed to fetch review:", error.message);
