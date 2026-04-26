@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
+    "dayjs": "^1.11.20",
     "next": "^15.5.12",
     "react": "19.1.0",
     "react-dom": "19.1.0",

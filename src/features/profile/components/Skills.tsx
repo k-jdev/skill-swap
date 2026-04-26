@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import useProfileStore from "@/features/profile/model/useProfileStore";
-import { createClient } from "@/shared/utils/supabase/client";
 import { SKILL_CATEGORIES } from "@/shared/constants/categories";
+import { addSkill, removeSkill } from "@/features/skill/api/skill.service";
 import { toast } from "sonner";
 function Skills() {
   const { skills, isEditing, userId, setProfile } = useProfileStore();
@@ -12,22 +12,14 @@ function Skills() {
 
   async function handleAdd() {
     if (!selected || skills.includes(selected)) return;
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("skills")
-      .insert({ user_id: userId, skill_title: selected });
+    const { error } = await addSkill(userId, selected);
     if (!error) {
       setProfile({ skills: [...skills, selected] });
     }
   }
 
   async function handleRemove(skill: string) {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("skills")
-      .delete()
-      .eq("user_id", userId)
-      .eq("skill_title", skill);
+    const { error } = await removeSkill(userId, skill);
     if (error) {
       toast.error("Failed to delete skill");
       console.log(error);
