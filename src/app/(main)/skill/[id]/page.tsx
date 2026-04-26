@@ -4,7 +4,7 @@ export const metadata = createMetadata("Skill Detail", "Viewing skill details");
 export default async function SkillPage({
   params,
 }: {
-  params: { id: string };
+  params: { id: number };
 }) {
   const { id } = await params;
   return (
