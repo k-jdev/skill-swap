@@ -26,7 +26,9 @@ export default async function ProfilePage() {
       user
         ? supabase
             .from("reviews")
-            .select("*")
+            .select(
+              "id, created_at, profile_id, author_id, rating, content, author:author_id (username, avatar_url)",
+            )
             .eq("profile_id", user.id)
             .order("created_at", { ascending: false })
         : Promise.resolve({ data: [] }),
