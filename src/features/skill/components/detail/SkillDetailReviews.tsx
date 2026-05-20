@@ -6,6 +6,8 @@ import { addReview, getReview } from "@/entities/review/review.service";
 import { useProfileStore } from "@/features/profile";
 import { createClient } from "@/shared/utils/supabase/client";
 import dayjs from "dayjs";
+
+//test
 interface ReviewProps {
   name: string;
   time: string;
