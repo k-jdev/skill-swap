@@ -56,6 +56,7 @@ function SkillForm() {
 
       const result = await createSkillAction({
         skillTitle: data.skillTitle,
+        skillPrice: data.skillPrice,
         category: data.category,
         language: data.language,
         proficiencyLevel: data.proficiencyLevel,
@@ -175,6 +176,17 @@ function SkillForm() {
             </div>
           ))}
         </div>
+      </div>
+      <div className="grid gap-2 mt-8">
+        <label className="text-[#334155] font-bold text-sm" htmlFor="">
+          Price
+        </label>
+        <input
+          {...register("skillPrice", { required: true })}
+          className="border border-[#E2E8F0] px-4 py-3 rounded-[12px]"
+          type="text"
+          placeholder="Price of credits per hour"
+        />
       </div>
       <div className="grid gap-2 mt-8">
         {" "}
