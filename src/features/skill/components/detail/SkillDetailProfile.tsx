@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-function SkillDetailProfile() {
+function SkillDetailProfile({ skillId }: { skillId: number }) {
   const status = true;
   return (
     <div className="rounded-[16px] p-8 bg-white shadow-md w-full">
