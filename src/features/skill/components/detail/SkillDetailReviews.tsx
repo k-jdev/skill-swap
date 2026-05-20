@@ -205,14 +205,14 @@ function SkillDetailReviews({
       <div className="flex gap-2 items-center mt-10">
         <button
           onClick={() => setViewAll((prev) => !prev)}
-          className="text-[#137FEC] text-[16px] font-bold"
+          className="text-[#137FEC] text-[16px] font-bold cursor-pointer"
         >
           {viewAll ? "View less" : "View all reviews"}
         </button>
         <p>or</p>
         <button
           onClick={() => setIsOpen(true)}
-          className="text-[#137FEC] text-[16px] font-bold"
+          className="text-[#137FEC] text-[16px] font-bold cursor-pointer"
         >
           Send your review
         </button>

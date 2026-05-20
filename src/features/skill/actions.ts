@@ -6,6 +6,7 @@ import * as z from "zod";
 
 const createSkillPayloadSchema = z.object({
   skillTitle: z.string().min(1),
+  skillPrice: z.number(),
   category: z.string().min(1),
   language: z.string().min(1),
   proficiencyLevel: z.enum(["beginner", "intermediate", "advanced"]),
@@ -33,6 +34,7 @@ export async function createSkillAction(
   const { error } = await supabase.from("skills").insert({
     user_id: user.id,
     skill_title: parsed.data.skillTitle,
+    skill_price: parsed.data.skillPrice,
     category: parsed.data.category,
     language: parsed.data.language,
     proficiency_level: parsed.data.proficiencyLevel,
