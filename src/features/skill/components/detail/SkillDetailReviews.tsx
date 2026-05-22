@@ -5,7 +5,7 @@ import { Button, Modal } from "@/shared/ui";
 import { addReview, getReview } from "@/entities/review/review.service";
 import { useProfileStore } from "@/features/profile";
 import { createClient } from "@/shared/utils/supabase/client";
-import dayjs from "dayjs";
+
 interface ReviewProps {
   name: string;
   time: string;
