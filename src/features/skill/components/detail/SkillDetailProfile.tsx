@@ -1,13 +1,22 @@
 import React from "react";
 import Image from "next/image";
+import { getSkillProfile } from "../../api/skill.server";
+async function SkillDetailProfile({ skillId }: { skillId: number }) {
+  let data = await getSkillProfile(skillId);
+  const profile = data?.profiles;
 
-function SkillDetailProfile({ skillId }: { skillId: number }) {
   const status = true;
   return (
     <div className="rounded-[16px] p-8 bg-white shadow-md w-full">
       <h2 className="text-[#0F172A] font-bold text-2xl">Teacher Profile</h2>
       <div className="flex justify-center items-center">
-        <Image src={"/images/bg.png"} alt="ds" width={64} height={64} />
+        <Image
+          src={profile?.avatar_url}
+          className="rounded-full"
+          alt="ds"
+          width={64}
+          height={64}
+        />
         <span>
           {status ? (
             <span className="bg-green-500 rounded-full w-2"> </span>
@@ -17,7 +26,9 @@ function SkillDetailProfile({ skillId }: { skillId: number }) {
         </span>
       </div>
       <div className="grid gap-2  justify-center text-center">
-        <h4 className="text-[#0F172A] font-bold text-xl">Alex Rivers</h4>
+        <h4 className="text-[#0F172A] font-bold text-xl">
+          {profile?.username}
+        </h4>
         <p className="text-[#64748B] text-[14px]">Senior Frontend Developer</p>
       </div>
       <div className="flex justify-around text-center">
@@ -31,10 +42,7 @@ function SkillDetailProfile({ skillId }: { skillId: number }) {
         </div>
       </div>
       <p className="text-[#475569] text-sm justify-center text-center">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus
-        tempore omnis tenetur corrupti. Id culpa cumque ab animi? Vel, esse
-        consectetur? Facere earum atque eius ab perspiciatis quam necessitatibus
-        esse!
+        {profile?.description}
       </p>
       <div className="flex justify-center text-center">
         {" "}
