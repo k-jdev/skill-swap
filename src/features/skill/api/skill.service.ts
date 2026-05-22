@@ -38,6 +38,7 @@ export async function getSkill(skillId: string | number) {
 
   return data;
 }
+
 export async function addSkill(userId: string, skillTitle: string) {
   const supabase = createClient();
 
