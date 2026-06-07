@@ -25,6 +25,7 @@ function SkillForm() {
     formState: { errors, isSubmitting },
   } = useForm<SkillFormData>({
     resolver: zodResolver(skillSchema),
+    shouldFocusError: false,
     defaultValues: {
       proficiencyLevel: "beginner",
     },
@@ -56,6 +57,7 @@ function SkillForm() {
 
       const result = await createSkillAction({
         skillTitle: data.skillTitle,
+        skillPrice: data.skillPrice,
         category: data.category,
         language: data.language,
         proficiencyLevel: data.proficiencyLevel,
@@ -74,14 +76,23 @@ function SkillForm() {
     }
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-8 ">
+    <form
+      onSubmit={handleSubmit(onSubmit, (errors) => {
+        const firstError = Object.values(errors)[0];
+        toast.error(
+          (firstError?.message as string) ||
+            "Please fill in all required fields",
+        );
+      })}
+      className="p-8 "
+    >
       <div className="grid gap-2 mb-2">
         <label className="text-[#334155] font-bold text-sm" htmlFor="">
           Skill Title
         </label>
         <input
           {...register("skillTitle", { required: true })}
-          className="border border-[#E2E8F0] px-4 py-3 rounded-[12px]"
+          className={`border px-4 py-3 rounded-[12px] ${errors.skillTitle ? "border-red-500" : "border-[#E2E8F0]"}`}
           type="text"
           placeholder="e.g. Master React.js Development"
         />
@@ -96,7 +107,7 @@ function SkillForm() {
           </label>
           <select
             {...register("category", { required: true })}
-            className="border border-[#E2E8F0] px-4 py-3 rounded-[12px] w-full appearance-none"
+            className={`border px-4 py-3 rounded-[12px] w-full appearance-none ${errors.category ? "border-red-500" : "border-[#E2E8F0]"}`}
             name="category"
             id="category"
             defaultValue=""
@@ -124,7 +135,7 @@ function SkillForm() {
           </label>
           <select
             {...register("language", { required: true })}
-            className="border border-[#E2E8F0] px-4 py-3 rounded-[12px] w-full appearance-none"
+            className={`border px-4 py-3 rounded-[12px] w-full appearance-none ${errors.language ? "border-red-500" : "border-[#E2E8F0]"}`}
             name="language"
             id="language"
             defaultValue="english"
@@ -177,13 +188,24 @@ function SkillForm() {
         </div>
       </div>
       <div className="grid gap-2 mt-8">
+        <label className="text-[#334155] font-bold text-sm" htmlFor="">
+          Price
+        </label>
+        <input
+          {...register("skillPrice", { required: true, valueAsNumber: true })}
+          className={`border px-4 py-3 rounded-[12px] ${errors.skillPrice ? "border-red-500" : "border-[#E2E8F0]"}`}
+          type="number"
+          placeholder="Price of credits per hour"
+        />
+      </div>
+      <div className="grid gap-2 mt-8">
         {" "}
         <label className="text-[#334155] font-bold text-sm" htmlFor="">
           Skill Description
         </label>
         <textarea
           {...register("skillDescription", { required: true })}
-          className="p-4 rounded-[12px] border border-[#E2E8F0]"
+          className={`p-4 rounded-[12px] border ${errors.skillDescription ? "border-red-500" : "border-[#E2E8F0]"}`}
           placeholder="Describe what you can teach and what students can expect to learn..."
         ></textarea>
         <p className=" text-[#94A3B8]">Minimum 100 characters recommended.</p>
@@ -195,7 +217,7 @@ function SkillForm() {
         </label>
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-[#CBD5E1] rounded-[12px] overflow-hidden bg-[#F8FAFC]/50 flex flex-col items-center justify-center cursor-pointer hover:bg-[#F1F5F9] transition min-h-[140px]"
+          className={`border-2 border-dashed rounded-[12px] overflow-hidden bg-[#F8FAFC]/50 flex flex-col items-center justify-center cursor-pointer hover:bg-[#F1F5F9] transition min-h-[140px] ${errors.image ? "border-red-500" : "border-[#CBD5E1]"}`}
         >
           {previewUrl ? (
             <div className="relative w-full h-full">

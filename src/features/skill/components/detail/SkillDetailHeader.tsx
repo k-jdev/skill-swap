@@ -1,21 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
-import { getSkill } from "@/features/skill/api/skill.service";
 import { Skill } from "@/entities/skill/model";
 
-function SkillDetailHeader({ skillId }: { skillId: number }) {
-  const [skill, setSkill] = useState<Skill | null>(null);
-
-  useEffect(() => {
-    getSkill(skillId)
-      .then((skill) => {
-        setSkill(skill);
-      })
-      .catch((e) => {
-        console.error("Error while fetching skill:", e);
-      });
-  }, [skillId]);
+function SkillDetailHeader({ skill }: { skill: Skill | null }) {
   return (
     <div className="w-full relative mb-8">
       <Image
@@ -24,7 +12,9 @@ function SkillDetailHeader({ skillId }: { skillId: number }) {
         width={1220}
         height={420}
         className="w-full h-120 object-cover rounded-2xl"
+        draggable={false}
       />
+
       <div className="absolute bottom-6 left-6 flex flex-col gap-3">
         <div className="flex gap-2">
           {skill?.category && (

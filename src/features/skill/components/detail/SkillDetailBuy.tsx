@@ -1,5 +1,134 @@
-import React from "react";
+"use client";
 
+import React, { useState } from "react";
+import { Skill } from "@/entities/skill/model";
+import { Modal } from "@/shared/ui";
+
+type Props = {
+  skill: Skill | null;
+  profileUsername: string | null;
+};
+
+export default function SkillDetailBuy({ skill, profileUsername }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <aside className="rounded-[16px] p-8 bg-white shadow-md w-full">
+      <div className="flex flex-col gap-6">
+        <div>
+          <p className="text-[#94A3B8] text-sm font-semibold tracking-wider">
+            EXCHANGE VALUE
+          </p>
+          <div className="flex items-end gap-3 mt-3">
+            <h2 className="text-[#137FEC] text-5xl font-extrabold">
+              {skill?.skill_price}
+            </h2>
+            <p className="text-[#475569] text-lg">Credits / hour</p>
+          </div>
+        </div>
+
+        <div>
+          <button
+            onClick={() => setIsOpen(true)}
+            className="w-full flex items-center justify-center bg-[#137FEC] hover:bg-[#0f6fe6] text-white font-bold py-4 rounded-[12px] shadow-[0_10px_20px_rgba(19,127,236,0.2)] transition-colors cursor-pointer"
+            type="button"
+          >
+            <ExchangeIcon />
+            <span className="text-lg">Request Exchange</span>
+          </button>
+          <p className="text-[#94A3B8] text-sm text-center mt-4">
+            {profileUsername} usually responds within 2 hours
+          </p>
+        </div>
+      </div>
+      <RequestModal
+        profileUsername={profileUsername}
+        skill={skill}
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+      />
+    </aside>
+  );
+}
+type RequestModalProps = {
+  skill: Skill | null;
+  isOpen: boolean;
+  onClose: () => void;
+  profileUsername: string | null;
+};
+
+export function RequestModal({
+  isOpen,
+  onClose,
+  skill,
+  profileUsername,
+}: RequestModalProps) {
+  return (
+    <Modal
+      size="lg"
+      title="Request Skill Exchange"
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <div className="flex items-center justify-between rounded-lg border border-[#C1C6D5] bg-[#EFF4FF] p-4">
+        <div className=" flex items-center gap-3">
+          <DevIcon />
+          <div className="grid">
+            <h4 className="text-[14px] text-[#0B1C30] font-semibold">
+              {skill?.skill_title}
+            </h4>
+            <p className="text-[12px] text-[#414753] font-medium">
+              {" "}
+              with {profileUsername}
+            </p>
+          </div>
+        </div>
+        <div className="grid">
+          <h4 className="text-[12px] text-[#0B1C30] font-medium text-right">
+            Value
+          </h4>
+          <p className="text-[14px] text-[#005BAF] font-semibold whitespace-nowrap">
+            {skill?.skill_price} credits/hour
+          </p>
+        </div>
+      </div>
+      <div className="py-6 grid">
+        <h3 className="pb-2 text-[14px] text-[#0B1C30] font-semibold">
+          Message to teacher!
+        </h3>
+        <textarea
+          className="border border-[#C1C6D5]  rounded-lg p-4"
+          placeholder={`Hi ${profileUsername}! I'm interested in learning about ${skill?.skill_title}...`}
+        ></textarea>
+        <p className="pt-2 text-[12px] text-[#414753] font-medium text-right">
+          0/500 characters
+        </p>
+      </div>
+      <div className="flex items-center justify-between rounded-lg border border-[#C1C6D5] bg-[#EFF4FF] p-4">
+        <div className="flex items-center gap-2">
+          <WalletIcon />
+          <p className="text-[14px] text-[#0B1C30] font-semibold">
+            Current Balance
+          </p>
+        </div>
+        <h3 className="font-semibold text-[#005EB5] text-2xl">12.5 credits</h3>
+      </div>
+      <div className="py-6 gap-2 flex  ">
+        <button
+          onClick={onClose}
+          className="border border-[#005BAF] rounded-full px-6 py-2.5 cursor-pointer"
+        >
+          <p className="font-semibold text-[#005BAF] text-[14px] ">Cancel</p>
+        </button>
+        <button className="border border-[#005BAF] rounded-full cursor-pointer px-6 py-2.5 bg-[#137FEC] shadow-lg">
+          <p className="font-semibold text-white text-[14px] ">Send Request</p>
+        </button>
+      </div>
+    </Modal>
+  );
+}
 function ExchangeIcon() {
   return (
     <svg
@@ -17,33 +146,39 @@ function ExchangeIcon() {
   );
 }
 
-export default function SkillDetailBuy() {
+function DevIcon() {
   return (
-    <aside className="rounded-[16px] p-8 bg-white shadow-md w-full">
-      <div className="flex flex-col gap-6">
-        <div>
-          <p className="text-[#94A3B8] text-sm font-semibold tracking-wider">
-            EXCHANGE VALUE
-          </p>
-          <div className="flex items-end gap-3 mt-3">
-            <h2 className="text-[#137FEC] text-5xl font-extrabold">1.5</h2>
-            <p className="text-[#475569] text-lg">Credits / hour</p>
-          </div>
-        </div>
+    <div className="px-3 py-4 rounded-[4px] bg-[#0074DB]/10 w-fit">
+      {" "}
+      <svg
+        width="20"
+        height="12"
+        viewBox="0 0 20 12"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6 12L0 6L6 0L7.425 1.425L2.825 6.025L7.4 10.6L6 12V12M14 12L12.575 10.575L17.175 5.975L12.6 1.4L14 0L20 6L14 12V12"
+          fill="#005BAF"
+        />
+      </svg>
+    </div>
+  );
+}
 
-        <div>
-          <button
-            className="w-full flex items-center justify-center bg-[#137FEC] hover:bg-[#0f6fe6] text-white font-bold py-4 rounded-[12px] shadow-[0_10px_20px_rgba(19,127,236,0.2)] transition-colors"
-            type="button"
-          >
-            <ExchangeIcon />
-            <span className="text-lg">Request Exchange</span>
-          </button>
-          <p className="text-[#94A3B8] text-sm text-center mt-4">
-            Alex usually responds within 2 hours
-          </p>
-        </div>
-      </div>
-    </aside>
+function WalletIcon() {
+  return (
+    <svg
+      width="19"
+      height="18"
+      viewBox="0 0 19 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2 16V16V16V16V16V16V16V16V2V2V2V2V2V2V2V2C2 2 2 2.37083 2 3.1125C2 3.85417 2 4.81667 2 6V12C2 13.1833 2 14.1458 2 14.8875C2 15.6292 2 16 2 16V16M2 18C1.45 18 0.979167 17.8042 0.5875 17.4125C0.195833 17.0208 0 16.55 0 16V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H16C16.55 0 17.0208 0.195833 17.4125 0.5875C17.8042 0.979167 18 1.45 18 2V4.5H16V2V2V2H2V2V2V16V16V16H16V16V16V13.5H18V16C18 16.55 17.8042 17.0208 17.4125 17.4125C17.0208 17.8042 16.55 18 16 18H2V18M10 14C9.45 14 8.97917 13.8042 8.5875 13.4125C8.19583 13.0208 8 12.55 8 12V6C8 5.45 8.19583 4.97917 8.5875 4.5875C8.97917 4.19583 9.45 4 10 4H17C17.55 4 18.0208 4.19583 18.4125 4.5875C18.8042 4.97917 19 5.45 19 6V12C19 12.55 18.8042 13.0208 18.4125 13.4125C18.0208 13.8042 17.55 14 17 14H10V14M17 12V12V12V6V6V6H10V6V6V12V12V12H17V12M13 10.5C13.4167 10.5 13.7708 10.3542 14.0625 10.0625C14.3542 9.77083 14.5 9.41667 14.5 9C14.5 8.58333 14.3542 8.22917 14.0625 7.9375C13.7708 7.64583 13.4167 7.5 13 7.5C12.5833 7.5 12.2292 7.64583 11.9375 7.9375C11.6458 8.22917 11.5 8.58333 11.5 9C11.5 9.41667 11.6458 9.77083 11.9375 10.0625C12.2292 10.3542 12.5833 10.5 13 10.5V10.5"
+        fill="#005EB5"
+      />
+    </svg>
   );
 }
