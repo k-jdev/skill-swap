@@ -17,3 +17,14 @@ export interface Review {
   rating: number;
   content: string;
 }
+
+export type ReviewItem = {
+  id: string;
+  content: string;
+  rating: number;
+  created_at: string;
+  author?: {
+    username?: string | null;
+    avatar_url?: string | null;
+  } | null;
+};
