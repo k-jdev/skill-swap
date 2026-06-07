@@ -3,7 +3,7 @@ import SkillDetailHeader from "./SkillDetailHeader";
 import SkillDetailAbout from "./SkillDetailAbout";
 import SkillDetailReviews from "./SkillDetailReviews";
 import SkillDetailProfile from "./SkillDetailProfile";
-import SkillDetailBuyClient from "./SkillDetailBuy";
+import SkillDetailBuy from "./SkillDetailBuy";
 import { getSkill } from "@/features/skill/api/skill.service";
 import { getSkillProfile } from "@/features/skill/api/skill.server";
 
