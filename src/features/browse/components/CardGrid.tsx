@@ -1,18 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Card } from "@/features/browse/components";
+import Card from "./Card";
 import { getSkillAction } from "../actions";
 import { Skill } from "@/entities";
 
-function CardGrid() {
-  const [skillTitle] = useState<string>("");
-  const [skillCategory] = useState<string>("");
+function CardGrid({ skillTitle, skillCategory }: any) {
   const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
     getSkillAction(skillCategory, skillTitle).then((result) => {
-      if (result.success) {
+      if (result.success && "data" in result) {
         setSkills(result.data);
+      } else {
+        console.error(result.error);
       }
     });
   }, [skillTitle, skillCategory]);
