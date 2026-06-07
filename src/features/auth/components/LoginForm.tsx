@@ -3,11 +3,11 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@/shared/ui";
-import useProfileStore from "@/shared/store/useProfileStore";
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
-import { loginAction } from "../actions";
+import { createClient } from "@/shared/utils/supabase/client";
+import { toast } from "sonner";
 
 import type { z } from "zod";
 
@@ -15,16 +15,11 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 function LoginForm() {
   const router = useRouter();
-  const {
-    setIsAuthenticated,
-    setName,
-    setEmail: setStoreEmail,
-  } = useProfileStore();
 
   const {
     register,
     handleSubmit,
-    setError,
+
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -32,23 +27,21 @@ function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const result = await loginAction(data);
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
 
-      if (result.error) {
-        setError("root", { message: result.error });
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      const userName = data.email.split("@")[0];
-      setName(userName);
-      setStoreEmail(data.email);
-      setIsAuthenticated(true);
-
-      router.refresh();
       router.push("/");
     } catch (err) {
       console.error("Login error:", err);
-      setError("root", { message: "Server error, please try again" });
+      toast.error("Server error, please try again");
     }
   };
 

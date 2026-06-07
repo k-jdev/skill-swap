@@ -1,4 +1,4 @@
-import { NavBar } from "@/shared/ui";
+import { NavBar } from "@/widgets";
 
 export default function MainLayout({
   children,

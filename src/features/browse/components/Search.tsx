@@ -1,7 +1,19 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-
+// import useSkillsStore from "@/features/skill/model/useSkillsStore";
 function Search() {
+  const [, setSkillTitle] = useState("");
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setSkillTitle(query);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [query, setSkillTitle]);
+
   return (
     <div className="relative mt-10">
       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -14,9 +26,11 @@ function Search() {
         />
       </div>
       <input
-        className="w-full h-14 pl-12 pr-4 rounded-full bg-slate-200/50  border border-slate-300  transition-all text-slate-900 dark:text-white placeholder-slate-500"
+        className="w-full h-14 pl-12 pr-4 rounded-full bg-slate-200/50  border border-slate-300  transition-all text-slate-900  placeholder-slate-500"
         placeholder="Search for skills like 'Graphic Design'..."
         type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
       />
     </div>
   );
