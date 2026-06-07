@@ -1,19 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-// import useSkillsStore from "@/features/skill/model/useSkillsStore";
-function Search() {
-  const [, setSkillTitle] = useState("");
-  const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setSkillTitle(query);
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [query, setSkillTitle]);
-
+function Search({ query, setQuery }: any) {
   return (
     <div className="relative mt-10">
       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

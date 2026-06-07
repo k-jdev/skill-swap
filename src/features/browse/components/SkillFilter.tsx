@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 const skills = ["All", "Design", "Programming", "Marketing", "Business"];
 
-function SkillFilter() {
-  const [skillCategory, setSkillCategory] = React.useState<string>("All");
+function SkillFilter({ skillCategory, setSkillCategory }: any) {
   return (
     <div className="flex space-x-4 mt-5 justify-center">
       {skills.map((skill) => (
