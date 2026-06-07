@@ -162,7 +162,8 @@ export function HowItWorks() {
               </h2>
               <p className="text-blue-100 text-lg mb-8 max-w-2xl">
                 Join over 50,000 learners and experts who are changing the way
-                the world learns. It's free, it's fast, and it's transformative.
+                the world learns. It&apos;s free, it&apos;s fast, and it&apos;s
+                transformative.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/register">
