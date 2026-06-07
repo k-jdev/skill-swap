@@ -6,8 +6,9 @@ import { Button, Modal } from "@/shared/ui";
 import { addReview, getReview } from "@/entities/review/review.service";
 import { ReviewItem } from "@/entities/review/model";
 import { useProfileStore } from "@/features/profile";
-
+import { createClient } from "@/shared/utils/supabase/client";
 import { StarIcon } from "../icons/StarIcon";
+
 
 interface ReviewProps {
   name: string;
