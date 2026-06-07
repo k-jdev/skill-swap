@@ -1,17 +1,20 @@
 import React from "react";
 import Image from "next/image";
-import { getSkillProfile } from "../../api/skill.server";
-async function SkillDetailProfile({ skillId }: { skillId: number }) {
-  let data = await getSkillProfile(skillId);
-  const profile = data?.profiles;
 
+type Profile = {
+  username?: string;
+  avatar_url?: string;
+  description?: string;
+} | null;
+
+function SkillDetailProfile({ profile }: { profile: Profile }) {
   const status = true;
   return (
     <div className="rounded-[16px] p-8 bg-white shadow-md w-full">
       <h2 className="text-[#0F172A] font-bold text-2xl">Teacher Profile</h2>
       <div className="flex justify-center items-center">
         <Image
-          src={profile?.avatar_url}
+          src={profile?.avatar_url || "/images/skill/placeholder.png"}
           className="rounded-full"
           alt="ds"
           width={64}
