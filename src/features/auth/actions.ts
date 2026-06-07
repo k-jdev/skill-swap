@@ -31,7 +31,7 @@ export async function registerAction(
     return { success: false, error: "Invalid data" };
   }
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data: signUpData, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
@@ -41,5 +41,14 @@ export async function registerAction(
     },
   });
   if (error) return { success: false, error: error.message };
+
+  if (signUpData.user) {
+    await supabase.from("profiles").insert({
+      id: signUpData.user.id,
+      email: parsed.data.email,
+      username: parsed.data.name,
+    });
+  }
+
   return { success: true, data: undefined };
 }

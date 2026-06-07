@@ -23,6 +23,7 @@ type Props = {
   initialData: ProfileParams | null;
   authEmail?: string;
   authName?: string;
+  readOnly?: boolean;
 };
 
 function UserInfo({
@@ -30,6 +31,7 @@ function UserInfo({
   initialData,
   authEmail = "",
   authName = "",
+  readOnly = false,
 }: Props) {
   const { setProfile } = useProfileStore();
   console.log("initialData:", initialData);
@@ -253,7 +255,7 @@ function UserInfo({
               Cancel
             </button>
           </>
-        ) : (
+        ) : !readOnly ? (
           <button
             onClick={handleEdit}
             className="flex items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 active:bg-slate-100"
@@ -274,7 +276,7 @@ function UserInfo({
             </svg>
             Edit Profile
           </button>
-        )}
+        ) : null}
       </div>
     </div>
   );

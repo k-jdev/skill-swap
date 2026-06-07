@@ -4,6 +4,7 @@ const PROFICIENCY_LEVELS = ["beginner", "intermediate", "advanced"] as const;
 
 export const skillSchema = z.object({
   skillTitle: z.string().min(1, "Skill title is required"),
+  skillPrice: z.number(),
   category: z.string().min(1, "Category is required"),
   language: z.string().min(1, "Teaching language is required"),
   proficiencyLevel: z.enum(PROFICIENCY_LEVELS),
