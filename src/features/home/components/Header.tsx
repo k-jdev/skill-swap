@@ -41,7 +41,7 @@ function Header() {
               {" "}
               <Button
                 text="Find a Skill"
-                className="px-8 py-3 text-lg rounded-[24px] font-bold shadow-md max-w-[160px]"
+                className="px-8 py-3 text-lg rounded-[24px] font-bold  "
               />
             </Link>
             <Link href="/skill/create">
