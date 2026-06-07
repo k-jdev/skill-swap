@@ -12,7 +12,9 @@ function SkillDetailHeader({ skill }: { skill: Skill | null }) {
         width={1220}
         height={420}
         className="w-full h-120 object-cover rounded-2xl"
+        draggable={false}
       />
+
       <div className="absolute bottom-6 left-6 flex flex-col gap-3">
         <div className="flex gap-2">
           {skill?.category && (
