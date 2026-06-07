@@ -2,9 +2,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import { Button, Modal } from "@/shared/ui";
+
 import { addReview, getReview } from "@/entities/review/review.service";
+import { ReviewItem } from "@/entities/review/model";
 import { useProfileStore } from "@/features/profile";
 import { createClient } from "@/shared/utils/supabase/client";
+import { StarIcon } from "../icons/StarIcon";
+
 
 interface ReviewProps {
   name: string;
@@ -12,34 +16,6 @@ interface ReviewProps {
   imageUrl: string;
   description: string;
   rating: number;
-}
-
-type ReviewItem = {
-  id: string;
-  content: string;
-  rating: number;
-  created_at: string;
-  author?: {
-    username?: string | null;
-    avatar_url?: string | null;
-  } | null;
-};
-
-export function StarIcon({ filled }: { filled?: boolean }) {
-  return (
-    <svg
-      width="20"
-      height="19"
-      viewBox="0 0 20 19"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6.85 14.825L10 12.925L13.15 14.85L12.325 11.25L15.1 8.85L11.45 8.525L10 5.125L8.55 8.5L4.9 8.825L7.675 11.25L6.85 14.825ZM3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-        fill={filled ? "#137FEC" : "#CBD5E1"}
-      />
-    </svg>
-  );
 }
 
 type ReviewModalProps = {
@@ -75,11 +51,7 @@ function ReviewModal({
     setIsSubmitting(true);
     setSubmitError("");
 
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const currentUserId = user?.id ?? userId;
+    const currentUserId = userId;
 
     if (!currentUserId) {
       setSubmitError("Unauthorized");
@@ -204,14 +176,14 @@ function SkillDetailReviews({
       <div className="flex gap-2 items-center mt-10">
         <button
           onClick={() => setViewAll((prev) => !prev)}
-          className="text-[#137FEC] text-[16px] font-bold"
+          className="text-[#137FEC] text-[16px] font-bold cursor-pointer"
         >
           {viewAll ? "View less" : "View all reviews"}
         </button>
         <p>or</p>
         <button
           onClick={() => setIsOpen(true)}
-          className="text-[#137FEC] text-[16px] font-bold"
+          className="text-[#137FEC] text-[16px] font-bold cursor-pointer"
         >
           Send your review
         </button>
@@ -228,6 +200,7 @@ function SkillDetailReviews({
 }
 
 function Review({ time, name, imageUrl, description, rating }: ReviewProps) {
+  console.log("Review render", { time, name, imageUrl, description, rating });
   return (
     <div className="mt-6">
       <div className="flex justify-between items-center">
