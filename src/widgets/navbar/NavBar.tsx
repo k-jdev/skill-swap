@@ -42,12 +42,16 @@ export default function NavBar() {
             </div>
           </Link>
           <div className="flex items-center">
-            <ul className="flex justify-between gap-10 font-medium text-black">
-              <li className="text-[#137fec]">
+            <ul className="flex justify-between gap-10 font-medium text-black ">
+              <li className="hover:text-[#137fec]">
                 <Link href="/browser">Browse</Link>
               </li>
-              <li>How it works</li>
-              <li>Contact</li>
+              <li className="hover:text-[#137fec]">
+                <Link href="/how-it-works">How it works</Link>
+              </li>
+              <li className="hover:text-[#137fec]">
+                <Link href="/contact">Contact</Link>
+              </li>
             </ul>
           </div>
         </div>
