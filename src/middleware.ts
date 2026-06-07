@@ -31,7 +31,12 @@ export async function middleware(request: NextRequest) {
 
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
+
+  if (error) {
+    console.log("Middleware: User not authenticated:", error.message);
+  }
 
   if (!user && request.nextUrl.pathname.startsWith("/profile")) {
     const url = request.nextUrl.clone();
