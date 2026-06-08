@@ -12,8 +12,8 @@ export async function getSkillAction(
 
   let query = supabase.from("skills").select("*");
 
-  if (category && category != "All") {
-    query = query.eq("category", category);
+  if (category && category !== "All") {
+    query = query.contains("category", [category.toLocaleLowerCase()]);
   }
   if (searchTerm) {
     query = query.ilike("skill_title", `%${searchTerm}%`);
