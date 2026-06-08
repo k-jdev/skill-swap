@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/shared/ui";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+
 import Link from "next/link";
 import { Skill } from "@/entities";
+
 interface CardProps {
   skill: Skill;
 }
@@ -26,11 +26,9 @@ function Card({ skill }: CardProps) {
         </div>
         <div className="p-4 gap-3 flex flex-col">
           <h3 className="text-2xl font-semibold text-black">
-            {skill.skill_title || <Skeleton width={150} />}
+            {skill.skill_title}
           </h3>
-          <p className="text-lg text-gray-500">
-            {skill.description || <Skeleton count={3} />}
-          </p>
+          <p className="text-lg text-gray-500">{skill.description}</p>
           <Link href={`/skill/${skill.id}`} className="block">
             <Button className="rounded-full font-medium" text="Connect" />
           </Link>
