@@ -5,7 +5,12 @@ import { getSkillAction } from "../actions";
 import { Skill } from "@/entities";
 import CardSkeleton from "./CardSkeleton";
 
-function CardGrid({ skillTitle, skillCategory }: any) {
+type CardGridProps = {
+  skillTitle: string;
+  skillCategory: string;
+};
+
+function CardGrid({ skillTitle, skillCategory }: CardGridProps) {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
