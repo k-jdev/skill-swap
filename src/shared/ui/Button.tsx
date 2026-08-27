@@ -1,14 +1,6 @@
 import React from "react";
 import Image from "next/image";
-
-type Props = {
-  text?: string;
-  icon?: string;
-  className?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  children?: React.ReactNode;
-  disabled?: boolean;
-};
+import ButtonProps from "../types/button";
 
 export default function Button({
   text,
@@ -17,10 +9,9 @@ export default function Button({
   children,
   disabled,
   icon,
-}: Props) {
+}: ButtonProps) {
   return (
     <div className={`flex gap-2 justify-between items-center ${className}`}>
-      {" "}
       {icon && <Image src={icon} sizes="w-2" alt="" />}
       <button
         onClick={onClick}

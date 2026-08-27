@@ -3,12 +3,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@/shared/ui";
-import Link from "next/link";
 import { registerSchema } from "../schemas";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/shared/utils/supabase/client";
 import { toast } from "sonner";
 import type { z } from "zod";
+
+import Link from "next/link";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 

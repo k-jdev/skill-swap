@@ -4,6 +4,7 @@ import {
   Skills,
   Reviews,
   ProfileInitializer,
+  Balance,
 } from "@/features/profile";
 import { createClient } from "@/shared/utils/supabase/server";
 
@@ -50,6 +51,7 @@ export default async function ProfilePage() {
         authEmail={user?.email ?? ""}
         authName={user?.user_metadata?.username ?? ""}
       />
+      <Balance />
       <Skills />
       <Reviews />
     </div>

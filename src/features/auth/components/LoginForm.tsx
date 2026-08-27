@@ -3,11 +3,12 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@/shared/ui";
-import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/shared/utils/supabase/client";
 import { toast } from "sonner";
+
+import Link from "next/link";
 
 import type { z } from "zod";
 
