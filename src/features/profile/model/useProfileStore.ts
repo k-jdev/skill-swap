@@ -7,13 +7,14 @@ interface ProfileStore extends ProfileState {
 }
 
 const initialState: ProfileState = {
-  isAuthenticated: false,
-  isEditing: false,
-  userId: "",
+  profileId: "",
   username: "",
   avatar_url: "",
   skills: [],
   reviews: [],
+  credits: 0,
+  isOwner: false,
+  isEditing: false,
 };
 
 const useProfileStore = create<ProfileStore>((set) => ({
