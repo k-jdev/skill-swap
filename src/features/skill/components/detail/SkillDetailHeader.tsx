@@ -18,7 +18,7 @@ function SkillDetailHeader({ skill }: { skill: Skill | null }) {
       <div className="absolute bottom-6 left-6 flex flex-col gap-3">
         <div className="flex gap-2">
           {skill?.category && (
-            <span className="bg-[#137FEC] rounded-full uppercase font-bold text-white text-xs py-1 px-3">
+            <span className="bg-primary rounded-full uppercase font-bold text-white text-xs py-1 px-3">
               {skill.category}
             </span>
           )}

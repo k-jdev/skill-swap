@@ -5,7 +5,7 @@ function Header() {
     <>
       {" "}
       <div className="mb-8">
-        <button className="flex items-center gap-2 text-[#64748B]">
+        <button className="flex items-center gap-2 text-muted">
           {" "}
           <svg
             width="11"
@@ -16,7 +16,7 @@ function Header() {
           >
             <path
               d="M2.55 6L6.28333 9.73333L5.33333 10.6667L0 5.33333L5.33333 0L6.28333 0.933333L2.55 4.66667H10.6667V6H2.55Z"
-              fill="#64748B"
+              className="fill-muted"
             />
           </svg>
           <Link href="/" className="ml-2">
@@ -25,10 +25,10 @@ function Header() {
         </button>
       </div>
       <div className="flex-col ">
-        <h2 className="text-[#0F172A] font-black text-3xl mb-2">
+        <h2 className="text-slate-900 font-black text-3xl mb-2">
           Offer a New Skill
         </h2>
-        <p className="text-[#64748B] text-lg">
+        <p className="text-muted text-lg">
           Share your expertise and grow the community. What do you want to
           teach?
         </p>

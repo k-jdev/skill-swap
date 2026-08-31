@@ -1,10 +1,43 @@
 @import "tailwindcss";
 
-@theme inline {
+@theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Brand palette. The blue is #106bc9 rather than the original #137fec:
+     Lighthouse flagged white-on-#137fec at 3.98:1 and #137fec-on-soft at
+     3.49:1, both below the 4.5:1 WCAG AA threshold for normal text. This
+     shade keeps the same hue while reaching 5.29:1 and 4.64:1. */
+  --color-primary: #106bc9;
+  --color-primary-hover: #0d5fb4;
+  --color-primary-active: #0a5199;
+  --color-primary-soft: #e7f1fd;
+  --color-primary-soft-hover: #d5e6fb;
+
+  --color-surface: #f6f7f8;
+  --color-surface-raised: #ffffff;
+
+  /* Neutrals shared by the skill and profile surfaces. */
+  --color-muted: #64748b;
+  --color-body: #475569;
+  --color-subtle: #cbd5e1;
+  --color-hairline: #e2e8f0;
+  --color-field: #e7edf3;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Utility used for labels that must stay available to screen readers. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

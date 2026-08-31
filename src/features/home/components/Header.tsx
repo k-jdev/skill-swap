@@ -4,7 +4,7 @@ import Link from "next/link";
 
 function Header() {
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#f6f7f8] to-indigo-100 overflow-hidden">
+    <div className="relative min-h-screen bg-gradient-to-br from-surface to-indigo-100 overflow-hidden">
       <div
         className="absolute inset-0 opacity-20"
         style={{
@@ -16,7 +16,7 @@ function Header() {
         }}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f6f7f8]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-surface" />
 
       <div className="absolute bottom-20 left-10 w-64 h-64 bg-blue-400 rounded-full blur-3xl opacity-30" />
       <div className="absolute bottom-10 right-20 w-80 h-80 bg-indigo-400 rounded-full blur-3xl opacity-25" />
@@ -27,7 +27,7 @@ function Header() {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
             Unlock Your Potential.
             <br />
-            <span className="text-[#137fec]">Share Your Skills.</span>
+            <span className="text-primary">Share Your Skills.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-8">

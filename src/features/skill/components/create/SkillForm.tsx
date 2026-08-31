@@ -3,7 +3,7 @@ import React, { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { skillSchema, type SkillFormData } from "../../schemas/skill.schema";
-import { uploadSkillImage } from "../../api/skill.service";
+import { uploadSkillImageAction } from "../../actions";
 import { createSkillAction } from "../../actions";
 import {
   SKILL_CATEGORIES,
@@ -48,12 +48,14 @@ function SkillForm() {
 
   const onSubmit = async (data: SkillFormData) => {
     try {
-      const imagePath = await uploadSkillImage(data.image);
-      if (!imagePath) {
-        toast.error("Failed to upload image");
-
+      const imageFormData = new FormData();
+      imageFormData.append("file", data.image);
+      const upload = await uploadSkillImageAction(imageFormData);
+      if (!upload.success) {
+        toast.error(upload.error);
         return;
       }
+      const imagePath = upload.data.url;
 
       const result = await createSkillAction({
         skillTitle: data.skillTitle,
@@ -87,12 +89,12 @@ function SkillForm() {
       className="p-8 "
     >
       <div className="grid gap-2 mb-2">
-        <label className="text-[#334155] font-bold text-sm" htmlFor="">
+        <label className="text-slate-700 font-bold text-sm" htmlFor="">
           Skill Title
         </label>
         <input
           {...register("skillTitle", { required: true })}
-          className={`border px-4 py-3 rounded-[12px] ${errors.skillTitle ? "border-red-500" : "border-[#E2E8F0]"}`}
+          className={`border px-4 py-3 rounded-[12px] ${errors.skillTitle ? "border-red-500" : "border-hairline"}`}
           type="text"
           placeholder="e.g. Master React.js Development"
         />
@@ -100,14 +102,14 @@ function SkillForm() {
       <div className="flex gap-4 mt-8">
         <div className="grid gap-2 flex-1">
           <label
-            className="text-[#334155] font-bold text-sm"
+            className="text-slate-700 font-bold text-sm"
             htmlFor="category"
           >
             Category
           </label>
           <select
             {...register("category", { required: true })}
-            className={`border px-4 py-3 rounded-[12px] w-full appearance-none ${errors.category ? "border-red-500" : "border-[#E2E8F0]"}`}
+            className={`border px-4 py-3 rounded-[12px] w-full appearance-none ${errors.category ? "border-red-500" : "border-hairline"}`}
             name="category"
             id="category"
             defaultValue=""
@@ -128,14 +130,14 @@ function SkillForm() {
         </div>
         <div className="grid gap-2 flex-1">
           <label
-            className="text-[#334155] font-bold text-sm"
+            className="text-slate-700 font-bold text-sm"
             htmlFor="language"
           >
             Teaching Language
           </label>
           <select
             {...register("language", { required: true })}
-            className={`border px-4 py-3 rounded-[12px] w-full appearance-none ${errors.language ? "border-red-500" : "border-[#E2E8F0]"}`}
+            className={`border px-4 py-3 rounded-[12px] w-full appearance-none ${errors.language ? "border-red-500" : "border-hairline"}`}
             name="language"
             id="language"
             defaultValue="english"
@@ -156,10 +158,10 @@ function SkillForm() {
       </div>
       <div className="grid gap-2 mt-8">
         {" "}
-        <label className="text-[#334155] font-bold text-sm" htmlFor="">
+        <label className="text-slate-700 font-bold text-sm" htmlFor="">
           Your Proficiency Level
         </label>
-        <div className="bg-[#F1F5F9] border border-[#E2E8F0] p-1 rounded-[12px] flex gap-3">
+        <div className="bg-slate-100 border border-hairline p-1 rounded-[12px] flex gap-3">
           {(["beginner", "intermediate", "advanced"] as const).map((level) => (
             <div
               key={level}
@@ -172,15 +174,15 @@ function SkillForm() {
               <div
                 className={`rounded-[12px] p-2 h-8 items-center justify-center flex ${
                   selectedLevel === level
-                    ? "bg-[#2563EB]"
-                    : "bg-white border border-[#E2E8F0] shadow-sm"
+                    ? "bg-primary-hover"
+                    : "bg-white border border-hairline shadow-sm"
                 }`}
               >
                 {selectedLevel === level && (
                   <div className="bg-white rounded-full p-1.5 w-fit"></div>
                 )}
               </div>
-              <h4 className="text-[#64748B] text-[14px] mt-2 font-semibold capitalize">
+              <h4 className="text-muted text-[14px] mt-2 font-semibold capitalize">
                 {level}
               </h4>
             </div>
@@ -188,39 +190,41 @@ function SkillForm() {
         </div>
       </div>
       <div className="grid gap-2 mt-8">
-        <label className="text-[#334155] font-bold text-sm" htmlFor="">
+        <label className="text-slate-700 font-bold text-sm" htmlFor="">
           Price
         </label>
         <input
           {...register("skillPrice", { required: true, valueAsNumber: true })}
-          className={`border px-4 py-3 rounded-[12px] ${errors.skillPrice ? "border-red-500" : "border-[#E2E8F0]"}`}
+          className={`border px-4 py-3 rounded-[12px] ${errors.skillPrice ? "border-red-500" : "border-hairline"}`}
           type="number"
           placeholder="Price of credits per hour"
         />
       </div>
       <div className="grid gap-2 mt-8">
         {" "}
-        <label className="text-[#334155] font-bold text-sm" htmlFor="">
+        <label className="text-slate-700 font-bold text-sm" htmlFor="">
           Skill Description
         </label>
         <textarea
           {...register("skillDescription", { required: true })}
-          className={`p-4 rounded-[12px] border ${errors.skillDescription ? "border-red-500" : "border-[#E2E8F0]"}`}
+          className={`p-4 rounded-[12px] border ${errors.skillDescription ? "border-red-500" : "border-hairline"}`}
           placeholder="Describe what you can teach and what students can expect to learn..."
         ></textarea>
-        <p className=" text-[#94A3B8]">Minimum 100 characters recommended.</p>
+        <p className=" text-muted">Minimum 100 characters recommended.</p>
       </div>
       <div className="grid gap-2 mt-8">
         {" "}
-        <label className="text-[#334155] font-bold text-sm" htmlFor="">
+        <label className="text-slate-700 font-bold text-sm" htmlFor="">
           Skill Representation
         </label>
         <div
           onClick={() => fileInputRef.current?.click()}
-          className={`border-2 border-dashed rounded-[12px] overflow-hidden bg-[#F8FAFC]/50 flex flex-col items-center justify-center cursor-pointer hover:bg-[#F1F5F9] transition min-h-[140px] ${errors.image ? "border-red-500" : "border-[#CBD5E1]"}`}
+          className={`border-2 border-dashed rounded-[12px] overflow-hidden bg-slate-50/50 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 transition min-h-[140px] ${errors.image ? "border-red-500" : "border-subtle"}`}
         >
           {previewUrl ? (
             <div className="relative w-full h-full">
+              {/* Blob preview URL — next/image cannot load blob: sources. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={previewUrl}
                 alt="Preview"
@@ -235,10 +239,10 @@ function SkillForm() {
           ) : (
             <>
               <ImageIcon />
-              <p className="text-[#334155] font-bold text-[15px] mt-3">
+              <p className="text-slate-700 font-bold text-[15px] mt-3">
                 Click to upload or drag &amp; drop
               </p>
-              <p className="text-[#94A3B8] text-[13px]">PNG, JPG up to 5MB</p>
+              <p className="text-muted text-[13px]">PNG, JPG up to 5MB</p>
             </>
           )}
           <input
@@ -261,14 +265,14 @@ function SkillForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-[#2563EB] cursor-pointer flex gap-2 items-center shadow-md rounded-[12px] px-5 py-3 text-white text-[16px] font-bold disabled:opacity-60"
+          className="bg-primary-hover cursor-pointer flex gap-2 items-center shadow-md rounded-[12px] px-5 py-3 text-white text-[16px] font-bold disabled:opacity-60"
         >
           <PlusIcon />
           Create Skill
         </button>
         <button
           type="button"
-          className="border cursor-pointer border-[#E2E8F0] rounded-[12px] px-5 py-3 text-[#475569] text-[16px] font-bold"
+          className="border cursor-pointer border-hairline rounded-[12px] px-5 py-3 text-body text-[16px] font-bold"
         >
           Cancel
         </button>

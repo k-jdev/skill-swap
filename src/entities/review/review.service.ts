@@ -57,6 +57,5 @@ export async function getReview(skillId: number) {
     console.error("Failed to fetch review:", error.message);
     return null;
   }
-  console.log(data);
   return data;
 }

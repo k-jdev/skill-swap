@@ -1,12 +1,20 @@
 import React from "react";
-import { RegisterForm } from "@/features/auth";
+import { RegisterForm, HeaderBlock } from "@/features/auth";
+import { createMetadata } from "@/shared/lib/createMetadata";
 
-function RegisterPage() {
+export const metadata = createMetadata(
+  "Register",
+  "Create your SkillSwap account",
+);
+
+export default function RegisterPage() {
   return (
-    <div>
+    <>
+      <HeaderBlock
+        title="Create your account"
+        subtitle="Join our community and start sharing your skills!"
+      />
       <RegisterForm />
-    </div>
+    </>
   );
 }
-
-export default RegisterPage;

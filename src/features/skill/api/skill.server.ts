@@ -2,6 +2,24 @@
 
 import { createClient } from "@/shared/utils/supabase/server";
 
+/** Server-side skill read used by the detail page (RSC). */
+export async function getSkillById(skillId: string | number) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("skills")
+    .select("*")
+    .eq("id", skillId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("getSkillById:", error.message);
+    return null;
+  }
+
+  return data;
+}
+
 export async function getSkillProfile(skillId: string | number) {
   const supabase = await createClient();
 
@@ -9,10 +27,10 @@ export async function getSkillProfile(skillId: string | number) {
     .from("skills")
     .select("user_id")
     .eq("id", skillId)
-    .single();
+    .maybeSingle();
 
   if (skillError || !skill) {
-    console.error("Failed to fetch skill:", skillError?.message);
+    console.error("getSkillProfile:", skillError?.message);
     return null;
   }
 
@@ -23,7 +41,7 @@ export async function getSkillProfile(skillId: string | number) {
     .maybeSingle();
 
   if (profileError) {
-    console.error("Failed to fetch profile:", profileError.message);
+    console.error("getSkillProfile:", profileError.message);
     return null;
   }
 

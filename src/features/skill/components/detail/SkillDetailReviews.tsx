@@ -1,232 +1,78 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
 
-import { Button, Modal } from "@/shared/ui";
-
-import { addReview, getReview } from "@/entities/review/review.service";
-import { ReviewItem } from "@/entities/review/model";
-import { useProfileStore } from "@/features/profile";
-import { createClient } from "@/shared/utils/supabase/client";
+import React from "react";
 import { StarIcon } from "../icons/StarIcon";
+import ReviewCard from "./reviews/ReviewCard";
+import ReviewModal from "./reviews/ReviewModal";
+import { useSkillReviews } from "./reviews/useSkillReviews";
 
+const PREVIEW_COUNT = 3;
 
-interface ReviewProps {
-  name: string;
-  time: string;
-  imageUrl: string;
-  description: string;
-  rating: number;
-}
-
-type ReviewModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmitted: () => Promise<void>;
-  skillId: number;
-  skillOwnerId: string;
-};
-
-function ReviewModal({
-  onClose,
-  onSubmitted,
-  isOpen,
-  skillId,
-  skillOwnerId,
-}: ReviewModalProps) {
-  const [rating, setRating] = useState<number>(0);
-  const [hoverRating, setHoverRating] = useState<number>(0);
-  const [content, setContent] = useState<string>("");
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [submitError, setSubmitError] = useState<string>("");
-  const { userId } = useProfileStore();
-
-  async function handleAddReview() {
-    if (isSubmitting) return;
-
-    if (!rating || !content.trim()) {
-      setSubmitError("Please provide rating and review text");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSubmitError("");
-
-    const currentUserId = userId;
-
-    if (!currentUserId) {
-      setSubmitError("Unauthorized");
-      setIsSubmitting(false);
-      return;
-    }
-
-    const { error } = await addReview(
-      currentUserId,
-      skillOwnerId,
-      skillId,
-      content.trim(),
-      rating,
-    );
-
-    if (error) {
-      setSubmitError(error.message);
-      setIsSubmitting(false);
-      return;
-    }
-
-    await onSubmitted();
-    setContent("");
-    setRating(0);
-    setHoverRating(0);
-    setIsSubmitting(false);
-    onClose();
-  }
-
-  return (
-    <Modal title="Send your review" onClose={onClose} isOpen={isOpen}>
-      <div className="grid gap-2">
-        <span className="flex gap-1">
-          {Array.from({ length: 5 }).map((_, index) => {
-            const starValue = index + 1;
-            return (
-              <span
-                key={index}
-                className="cursor-pointer"
-                onMouseEnter={() => setHoverRating(starValue)}
-                onMouseLeave={() => setHoverRating(0)}
-                onClick={() => setRating(starValue)}
-              >
-                <StarIcon filled={starValue <= (hoverRating || rating)} />
-              </span>
-            );
-          })}
-        </span>
-        <textarea
-          className="w-full"
-          name="review"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Text your review..."
-        ></textarea>
-        {submitError ? (
-          <p className="text-sm text-red-500">{submitError}</p>
-        ) : null}
-        <Button onClick={handleAddReview} disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </Button>
-      </div>
-    </Modal>
-  );
-}
-
-function SkillDetailReviews({
+export default function SkillDetailReviews({
   skillId,
   skillOwnerId,
 }: {
   skillId: number;
   skillOwnerId: string;
 }) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [reviewsData, setReviewsData] = useState<ReviewItem[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [viewAll, setViewAll] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [showAll, setShowAll] = React.useState(false);
+  const { reviews, isLoading, averageRating, reload } = useSkillReviews(skillId);
 
-  const loadReviews = useCallback(async () => {
-    setIsLoading(true);
-    const data = await getReview(skillId);
-    setReviewsData((data as ReviewItem[] | null) ?? []);
-    setIsLoading(false);
-  }, [skillId]);
-
-  useEffect(() => {
-    void loadReviews();
-  }, [loadReviews]);
-
-  const averageRating = reviewsData.length
-    ? reviewsData.reduce((acc, val) => acc + val.rating, 0) / reviewsData.length
-    : 0;
+  const visible = showAll ? reviews : reviews.slice(0, PREVIEW_COUNT);
+  const hasMore = reviews.length > PREVIEW_COUNT;
 
   return (
-    <section className="bg-white rounded-lg p-8 shadow-md">
-      <div className="flex justify-between">
-        <h2 className="text-[#0F172A] text-2xl font-bold">Reviews & Ratings</h2>
-        <div className="flex gap-1">
-          <StarIcon filled={true} />
-          <p className="text-[#137FEC] font-bold">{averageRating.toFixed(1)}</p>
-          <p className="text-[#94A3B8]">({reviewsData.length} reviews)</p>
+    <section className="rounded-lg bg-white p-8 shadow-md">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-2xl font-bold text-slate-900">Reviews &amp; Ratings</h2>
+        <div className="flex items-center gap-1">
+          <StarIcon filled />
+          <p className="font-bold text-primary">{averageRating.toFixed(1)}</p>
+          <p className="text-muted">({reviews.length} reviews)</p>
         </div>
       </div>
-      {isLoading ? (
-        <p className="mt-4 text-[#64748B]">Loading reviews...</p>
-      ) : null}
-      {!isLoading && reviewsData.length === 0 ? (
-        <p className="mt-4 text-[#64748B]">No reviews yet</p>
-      ) : null}
-      {!isLoading
-        ? (viewAll ? reviewsData : reviewsData.slice(0, 3)).map((review) => (
-            <Review
-              key={review.id}
-              name={review.author?.username || "User"}
-              time={new Date(review.created_at).toLocaleDateString()}
-              imageUrl={review.author?.avatar_url || ""}
-              description={review.content}
-              rating={review.rating}
-            />
-          ))
-        : null}
-      <div className="flex gap-2 items-center mt-10">
+
+      {isLoading && <p className="mt-4 text-muted">Loading reviews...</p>}
+
+      {!isLoading && reviews.length === 0 && (
+        <p className="mt-4 text-muted">
+          No reviews yet — be the first to leave one.
+        </p>
+      )}
+
+      {!isLoading &&
+        visible.map((review) => <ReviewCard key={review.id} review={review} />)}
+
+      <div className="mt-10 flex flex-wrap items-center gap-2">
+        {hasMore && (
+          <>
+            <button
+              type="button"
+              onClick={() => setShowAll((current) => !current)}
+              className="cursor-pointer text-[16px] font-bold text-primary"
+            >
+              {showAll ? "View less" : "View all reviews"}
+            </button>
+            <p>or</p>
+          </>
+        )}
         <button
-          onClick={() => setViewAll((prev) => !prev)}
-          className="text-[#137FEC] text-[16px] font-bold cursor-pointer"
-        >
-          {viewAll ? "View less" : "View all reviews"}
-        </button>
-        <p>or</p>
-        <button
-          onClick={() => setIsOpen(true)}
-          className="text-[#137FEC] text-[16px] font-bold cursor-pointer"
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="cursor-pointer text-[16px] font-bold text-primary"
         >
           Send your review
         </button>
       </div>
+
       <ReviewModal
-        skillOwnerId={skillOwnerId}
         skillId={skillId}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        onSubmitted={loadReviews}
+        skillOwnerId={skillOwnerId}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmitted={reload}
       />
     </section>
   );
 }
-
-function Review({ time, name, imageUrl, description, rating }: ReviewProps) {
-  console.log("Review render", { time, name, imageUrl, description, rating });
-  return (
-    <div className="mt-6">
-      <div className="flex justify-between items-center">
-        <div className="flex gap-1 items-center">
-          {imageUrl ? (
-            <img className="w-10 h-10 rounded-full" src={imageUrl} alt={name} />
-          ) : (
-            <div
-              className="w-8 h-8 rounded-full bg-[#E2E8F0]"
-              aria-hidden="true"
-            />
-          )}
-          <div className="flex flex-col">
-            <p>{name}</p>
-            <span>
-              {Array.from({ length: rating }).map((_, index) => (
-                <span key={index}>★</span>
-              ))}
-            </span>
-          </div>
-        </div>
-        <p>{time}</p>
-      </div>
-      <h3>{description}</h3>
-    </div>
-  );
-}
-
-export default SkillDetailReviews;

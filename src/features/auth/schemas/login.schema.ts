@@ -1,10 +1,11 @@
 import * as z from "zod";
+import { emailSchema } from "./password.schema";
 
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, "Email is required")
-    .email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
+  email: emailSchema,
+  // Deliberately lax: the policy is enforced at sign-up, and rejecting an
+  // existing (older, weaker) password here would lock legacy users out.
+  password: z.string().min(1, "Password is required"),
 });
+
+export type LoginFormData = z.infer<typeof loginSchema>;
