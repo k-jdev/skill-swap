@@ -21,7 +21,7 @@ function SkillDetailProfile({ profile }: { profile: Profile }) {
 
   return (
     <div className="rounded-[16px] p-8 bg-white shadow-md w-full text-center">
-      <h2 className="text-[#0F172A] font-bold text-2xl text-center pb-4">
+      <h2 className="text-slate-900 font-bold text-2xl text-center pb-4">
         Teacher Profile
       </h2>
       <div className="flex justify-center items-center">
@@ -42,24 +42,24 @@ function SkillDetailProfile({ profile }: { profile: Profile }) {
         </span>
       </div>
       <div className="grid gap-2  justify-center text-center">
-        <h4 className="text-[#0F172A] font-bold text-xl">
+        <h4 className="text-slate-900 font-bold text-xl">
           {profile?.username}
         </h4>
-        <p className="text-[#64748B] text-[14px] font-semibold">
+        <p className="text-muted text-[14px] font-semibold">
           Senior Frontend Developer
         </p>
       </div>
       <div className="flex justify-around text-center py-2">
         <div className="grid  justify-center">
-          <p className="text-[#137FEC]  font-bold">4.9</p>
-          <p className="text-[#94A3B8] font-bold text-sm">Rating</p>
+          <p className="text-primary  font-bold">4.9</p>
+          <p className="text-muted font-bold text-sm">Rating</p>
         </div>
         <div className="grid  justify-center ">
-          <p className="text-[#0F172A]  font-bold">42</p>
-          <p className="text-[#94A3B8] font-bold text-sm">Students</p>
+          <p className="text-slate-900  font-bold">42</p>
+          <p className="text-muted font-bold text-sm">Students</p>
         </div>
       </div>
-      <p className="text-[#475569] text-sm justify-center text-center py-2">
+      <p className="text-body text-sm justify-center text-center py-2">
         {profile?.description}
       </p>
       <div className="flex justify-center text-center">

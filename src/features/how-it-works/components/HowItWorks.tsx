@@ -71,7 +71,7 @@ export function HowItWorks() {
     <div className="min-h-screen bg-white">
       <div className="relative overflow-hidden py-24 px-4">
         <div className="relative z-10 max-w-7xl mx-auto">
-          <span className="inline-block text-[#137FEC] bg-[#137FEC]/10 px-3 py-1 text-sm font-bold rounded-full mb-4">
+          <span className="inline-block text-primary bg-primary/10 px-3 py-1 text-sm font-bold rounded-full mb-4">
             THE EXCHANGE ECONOMY
           </span>
           <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-6">
@@ -84,7 +84,7 @@ export function HowItWorks() {
           </p>
           <div className="flex flex-wrap gap-4">
             <Link href="/register">
-              <button className="bg-[#137FEC] text-white font-bold py-3 px-6 rounded-xl hover:bg-[#137FEC]/90 transition-colors duration-200">
+              <button className="bg-primary text-white font-bold py-3 px-6 rounded-xl hover:bg-primary/90 transition-colors duration-200">
                 Get Started Today
               </button>
             </Link>
@@ -95,7 +95,7 @@ export function HowItWorks() {
         </div>
       </div>
 
-      <div className="bg-[#F8FAFC] py-24 px-4">
+      <div className="bg-slate-50 py-24 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {steps.map((step) => (
@@ -104,7 +104,7 @@ export function HowItWorks() {
                 className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-200"
               >
                 <div className="flex items-center justify-between mb-6">
-                  <div className="w-12 h-12 bg-[#137FEC]/10 rounded-xl flex items-center justify-center text-[#137FEC]">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                     {step.icon}
                   </div>
                   <span className="text-4xl font-bold text-gray-200">
@@ -155,7 +155,7 @@ export function HowItWorks() {
             ))}
           </div>
 
-          <div className="relative bg-gradient-to-br from-[#137FEC] to-[#0a5fb8] rounded-3xl p-12 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-primary to-primary-active rounded-3xl p-12 overflow-hidden">
             <div className="relative z-10">
               <h2 className="text-4xl font-bold text-white mb-4">
                 Ready to swap your first skill?
@@ -167,7 +167,7 @@ export function HowItWorks() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/register">
-                  <button className="bg-white text-[#137FEC] font-bold py-3 px-8 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+                  <button className="bg-white text-primary font-bold py-3 px-8 rounded-xl hover:bg-gray-100 transition-colors duration-200">
                     Create Your Profile
                   </button>
                 </Link>
