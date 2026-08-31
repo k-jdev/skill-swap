@@ -4,7 +4,12 @@ import Card from "./Card";
 import { getSkillAction } from "../actions";
 import { Skill } from "@/entities";
 
-function CardGrid({ skillTitle, skillCategory }: any) {
+type CardGridProps = {
+  skillTitle: string;
+  skillCategory: string;
+};
+
+function CardGrid({ skillTitle, skillCategory }: CardGridProps) {
   const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
