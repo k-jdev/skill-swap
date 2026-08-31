@@ -1,80 +1,77 @@
 "use client";
+
 import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Input } from "@/shared/ui";
 import Link from "next/link";
-import { loginSchema } from "@/features/auth/schemas";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/shared/utils/supabase/client";
-import { toast } from "sonner";
-
-import type { z } from "zod";
-
-type LoginFormData = z.infer<typeof loginSchema>;
+import { useSearchParams } from "next/navigation";
+import { Button, Input, PasswordInput } from "@/shared/ui";
+import { loginSchema, type LoginFormData } from "@/features/auth/schemas";
+import { loginAction } from "@/features/auth/actions";
+import { useAuthForm } from "@/features/auth/model/useAuthForm";
+import { safeRedirect, redirectParam } from "@/shared/config/routes";
 
 function LoginForm() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = safeRedirect(searchParams.get(redirectParam)) ?? "/";
 
   const {
     register,
-    handleSubmit,
-
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    onSubmit,
+    isSubmitting,
+    formState: { errors },
+  } = useAuthForm<LoginFormData, { needsEmailConfirmation: false }>({
+    schema: loginSchema,
+    action: loginAction,
+    defaultValues: { email: "", password: "" },
+    redirectTo,
+    successMessage: "Welcome back!",
   });
-
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
-
-      router.push("/");
-    } catch (err) {
-      console.error("Login error:", err);
-      toast.error("Server error, please try again");
-    }
-  };
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-white p-8 rounded-xl shadow-xl space-y-6"
+      onSubmit={onSubmit}
+      noValidate
+      className="space-y-6 rounded-xl bg-white p-8 shadow-xl"
     >
       <div className="space-y-6">
         <Input
           {...register("email")}
           type="email"
+          inputMode="email"
+          autoComplete="email"
           placeholder="Email"
           label="Email"
           id="email"
+          required
           error={errors.email?.message ?? null}
         />
 
-        <Input
+        <PasswordInput
           {...register("password")}
-          type="password"
+          autoComplete="current-password"
           placeholder="Password"
           label="Password"
           id="password"
+          required
           error={errors.password?.message ?? null}
         />
       </div>
 
+      <div className="text-right">
+        <Link
+          href="/forgot-password"
+          className="text-sm font-medium text-primary hover:text-primary-hover"
+        >
+          Forgot password?
+        </Link>
+      </div>
+
       {errors.root && (
-        <p className="text-center text-red-500">{errors.root.message}</p>
+        <p role="alert" className="text-center text-red-600">
+          {errors.root.message}
+        </p>
       )}
 
-      <Button disabled={isSubmitting}>
+      <Button isLoading={isSubmitting}>
         {isSubmitting ? "Logging in..." : "Login"}
       </Button>
 
@@ -82,7 +79,7 @@ function LoginForm() {
         Don&apos;t have an account?{" "}
         <Link
           href="/register"
-          className="text-[#137fec] hover:text-[#137fec]/80"
+          className="text-primary hover:text-primary-hover"
         >
           Sign up
         </Link>

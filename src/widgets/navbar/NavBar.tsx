@@ -1,124 +1,142 @@
 "use client";
-import React, { useCallback, useRef, useState } from "react";
+
+import React from "react";
 import Image from "next/image";
-import NavButtons from "./NavButtons";
 import Link from "next/link";
-import useProfileStore from "../../features/profile/model/useProfileStore";
-import { logoutUser } from "@/features/auth/api/auth.service";
+import { usePathname } from "next/navigation";
+import UserMenu from "./UserMenu";
+import NavButtons from "./NavButtons";
+import useSessionStore from "@/features/auth/model/useSessionStore";
+
+const LINKS = [
+  { href: "/browser", label: "Browse" },
+  { href: "/how-it-works", label: "How it works" },
+];
 
 export default function NavBar() {
-  const { isAuthenticated, avatar_url, username, setProfile } =
-    useProfileStore();
-  const [isHovered, setIsHovered] = useState(false);
-  const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const user = useSessionStore((state) => state.user);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const pathname = usePathname();
 
-  const handleMouseEnter = useCallback(() => {
-    if (closeTimeout.current) {
-      clearTimeout(closeTimeout.current);
-      closeTimeout.current = null;
-    }
-    setIsHovered(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    closeTimeout.current = setTimeout(() => {
-      setIsHovered(false);
-    }, 200);
-  }, []);
+  React.useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   return (
-    <nav className="flex items-center justify-between py-4 px-5 border-b border-slate-200 bg-white">
-      <div className="flex w-full items-center justify-between gap-4">
-        <div className="flex items-center gap-10 cursor-pointer">
-          <Link href="/">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/icons/rhombus.svg"
-                alt="logo"
-                width={32}
-                height={32}
-              />
-              <p className="text-2xl text-black font-semibold">SkillSwap</p>
-            </div>
+    <nav className="border-b border-slate-200 bg-white">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <div className="flex items-center gap-10">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/icons/rhombus.svg" alt="" width={32} height={32} aria-hidden />
+            <span className="text-2xl font-semibold text-black">SkillSwap</span>
           </Link>
-          <div className="flex items-center">
-            <ul className="flex justify-between gap-10 font-medium text-black ">
-              <li className="hover:text-[#137fec]">
-                <Link href="/browser">Browse</Link>
+
+          <ul className="hidden items-center gap-10 font-medium text-black md:flex">
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  aria-current={pathname === link.href ? "page" : undefined}
+                  className="hover:text-primary aria-[current=page]:text-primary"
+                >
+                  {link.label}
+                </Link>
               </li>
-              <li className="hover:text-[#137fec]">
-                <Link href="/how-it-works">How it works</Link>
-              </li>
-              <li className="hover:text-[#137fec]">
-                <Link href="/contact">Contact</Link>
-              </li>
-            </ul>
-          </div>
+            ))}
+          </ul>
         </div>
 
-        <div className="flex gap-4">
-          {isAuthenticated ? (
-            <div
-              className="relative"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              <Link href="/profile">
-                {avatar_url ? (
-                  <img
-                    src={avatar_url}
-                    alt="profile"
-                    className="w-10 h-10 rounded-full object-cover cursor-pointer"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold cursor-pointer">
-                    {username.charAt(0).toUpperCase()}
-                  </div>
-                )}
-              </Link>
-
-              {isHovered && (
-                <div
-                  className="absolute top-full right-0 mt-2 bg-white text-black p-3 rounded shadow-lg z-50 whitespace-nowrap"
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div
-                    className="flex items-center gap-2 pr-6 cursor-pointer"
-                    onClick={async () => {
-                      const { error } = await logoutUser();
-                      if (!error) {
-                        setProfile({
-                          isAuthenticated: false,
-                          avatar_url: "",
-                          username: "",
-                        });
-                      }
-                    }}
-                  >
-                    <Image
-                      src="/icons/exit.svg"
-                      alt="exit"
-                      width={24}
-                      height={24}
-                    />
-                    <p>Disconnect</p>
-                  </div>
-                </div>
-              )}
-            </div>
+        <div className="flex items-center gap-4">
+          {user ? (
+            <UserMenu user={user} />
           ) : (
-            <>
+            <div className="hidden gap-4 sm:flex">
               <Link href="/login">
-                <NavButtons isLogin={true} text="Login" />
+                <NavButtons isLogin text="Login" />
               </Link>
               <Link href="/register">
                 <NavButtons text="Sign Up" />
               </Link>
-            </>
+            </div>
           )}
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((current) => !current)}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
+            aria-label="Toggle navigation"
+            className="cursor-pointer rounded-lg p-2 text-black md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <BurgerIcon open={mobileOpen} />
+          </button>
         </div>
       </div>
+
+      {mobileOpen && (
+        <div id="mobile-nav" className="border-t border-slate-200 md:hidden">
+          <ul className="flex flex-col gap-1 px-4 py-3 font-medium text-black">
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="block rounded-lg px-2 py-2 hover:bg-slate-50"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            {!user && (
+              <>
+                <li>
+                  <Link
+                    href="/login"
+                    className="block rounded-lg px-2 py-2 hover:bg-slate-50"
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/register"
+                    className="block rounded-lg px-2 py-2 text-primary hover:bg-slate-50"
+                  >
+                    Sign Up
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      )}
     </nav>
+  );
+}
+
+function BurgerIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden
+    >
+      {open ? (
+        <>
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </>
+      ) : (
+        <>
+          <path d="M3 6h18" />
+          <path d="M3 12h18" />
+          <path d="M3 18h18" />
+        </>
+      )}
+    </svg>
   );
 }

@@ -1,35 +1,89 @@
 import React from "react";
 import Image from "next/image";
+import type ButtonProps from "../types/button";
+import type { ButtonSize, ButtonVariant } from "../types/button";
 
-type Props = {
-  text?: string;
-  icon?: string;
-  className?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  children?: React.ReactNode;
-  disabled?: boolean;
+const VARIANTS: Record<ButtonVariant, string> = {
+  primary:
+    "bg-primary text-white hover:bg-primary-hover active:bg-primary-active",
+  secondary:
+    "bg-primary-soft text-primary hover:bg-primary-soft-hover active:bg-primary-soft-hover",
+  ghost:
+    "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 active:bg-slate-100",
+  danger: "bg-red-600 text-white hover:bg-red-700 active:bg-red-800",
+};
+
+const SIZES: Record<ButtonSize, string> = {
+  sm: "py-2 px-4 text-sm",
+  md: "py-3 px-4 text-base",
+  lg: "py-4 px-6 text-lg",
 };
 
 export default function Button({
   text,
-  className,
-  onClick,
+  className = "",
   children,
-  disabled,
   icon,
-}: Props) {
+  variant = "primary",
+  size = "md",
+  isLoading = false,
+  fullWidth = true,
+  disabled,
+  type = "submit",
+  ...buttonProps
+}: ButtonProps) {
+  const isDisabled = disabled || isLoading;
+
   return (
-    <div className={`flex gap-2 justify-between items-center ${className}`}>
-      {" "}
-      {icon && <Image src={icon} sizes="w-2" alt="" />}
-      <button
-        onClick={onClick}
-        disabled={disabled}
-        className={`w-full bg-[#137fec] cursor-pointer text-white font-bold py-3 px-4 rounded-[1rem] hover:bg-[#137fec]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#137fec] focus:ring-offset-[#0d141b] dark:focus:ring-offset-[#101922] transition-colors duration-300 ${className}`}
-        type="submit"
-      >
-        {children || text || "Login"}
-      </button>
-    </div>
+    <button
+      {...buttonProps}
+      type={type}
+      disabled={isDisabled}
+      aria-busy={isLoading || undefined}
+      className={[
+        "inline-flex items-center justify-center gap-2 rounded-2xl font-bold",
+        "transition-colors duration-200",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+        "disabled:opacity-60 disabled:cursor-not-allowed",
+        VARIANTS[variant],
+        SIZES[size],
+        fullWidth ? "w-full" : "",
+        isDisabled ? "" : "cursor-pointer",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      {isLoading && <Spinner />}
+      {!isLoading && icon && (
+        <Image src={icon} alt="" width={20} height={20} aria-hidden />
+      )}
+      {children || text}
+    </button>
+  );
+}
+
+function Spinner() {
+  return (
+    <svg
+      className="h-4 w-4 animate-spin"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"
+      />
+    </svg>
   );
 }

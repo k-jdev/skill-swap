@@ -1,32 +1,55 @@
 import React from "react";
 
-type InputProps = Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  "className"
-> & {
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
-  className?: string;
   error?: string | null;
+  hint?: string;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, id, className = "", error, ...inputProps }, ref) => {
+  ({ label, id, className = "", error, hint, required, ...inputProps }, ref) => {
+    const generatedId = React.useId();
+    const inputId = id ?? generatedId;
+    const errorId = `${inputId}-error`;
+    const hintId = `${inputId}-hint`;
+
+    const describedBy =
+      [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(" ") ||
+      undefined;
+
     return (
       <div className="space-y-2">
         {label && (
-          <label className="text-sm font-medium " htmlFor={id}>
+          <label className="text-sm font-medium" htmlFor={inputId}>
             {label}
+            {required && (
+              <span className="text-red-500" aria-hidden>
+                {" *"}
+              </span>
+            )}
           </label>
         )}
         <input
-          id={id}
+          id={inputId}
           ref={ref}
-          className={`w-full p-4 rounded-[1rem] bg-[#e7edf3] dark:bg-input-dark border-none focus:ring-2 focus:ring-primary focus:outline-none placeholder-subtle-light dark:placeholder-subtle-dark ${className} ${
-            error ? "ring-2 ring-red-500" : ""
+          required={required}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy}
+          className={`w-full rounded-2xl border border-transparent bg-field p-4 text-slate-800 placeholder-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30 ${className} ${
+            error ? "border-red-500 ring-2 ring-red-500/30" : ""
           }`}
           {...inputProps}
         />
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {hint && !error && (
+          <p id={hintId} className="text-xs text-slate-500">
+            {hint}
+          </p>
+        )}
+        {error && (
+          <p id={errorId} role="alert" className="text-sm text-red-600">
+            {error}
+          </p>
+        )}
       </div>
     );
   },
