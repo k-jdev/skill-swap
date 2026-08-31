@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import useProfileStore from "@/features/profile/model/useProfileStore";
 import { Review } from "@/entities";
 function StarRating({ rating }: { rating: number }) {
@@ -30,10 +31,12 @@ function ReviewCard({ review }: { review: Review }) {
     <div className="mt-10 flex-col gap-6">
       <div className="flex gap-4">
         {avatarUrl ? (
-          <img
-            className="w-[50px] h-[50px] rounded-full object-cover shrink-0"
+          <Image
+            className="h-[50px] w-[50px] shrink-0 rounded-full object-cover"
             src={avatarUrl}
             alt={displayName}
+            width={50}
+            height={50}
           />
         ) : (
           <div className="w-[50px] h-[50px] rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold text-lg select-none shrink-0">
@@ -82,7 +85,7 @@ function Reviews() {
             <div className="flex-col">
               <p className="text-7xl font-bold">{avgRating.toFixed(1)}</p>
               <StarRating rating={Math.round(avgRating)} />
-              <p className="text-slate-400">{reviews.length} reviews</p>
+              <p className="text-slate-500">{reviews.length} reviews</p>
             </div>
             <div className="mt-4 w-full">
               {ratingBuckets.map((bucket) => (
@@ -96,7 +99,7 @@ function Reviews() {
                       style={{ width: `${bucket.percentage}%` }}
                     />
                   </div>
-                  <span className="text-sm text-slate-400 ml-2">
+                  <span className="text-sm text-slate-500 ml-2">
                     {bucket.percentage}%
                   </span>
                 </div>
@@ -109,7 +112,7 @@ function Reviews() {
           ))}
         </>
       ) : (
-        <p className="text-slate-400 text-sm mt-4">No reviews yet.</p>
+        <p className="text-slate-500 text-sm mt-4">No reviews yet.</p>
       )}
     </div>
   );

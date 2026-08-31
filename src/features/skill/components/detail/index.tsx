@@ -4,12 +4,11 @@ import SkillDetailAbout from "./SkillDetailAbout";
 import SkillDetailReviews from "./SkillDetailReviews";
 import SkillDetailProfile from "./SkillDetailProfile";
 import SkillDetailBuy from "./SkillDetailBuy";
-import { getSkill } from "@/features/skill/api/skill.service";
-import { getSkillProfile } from "@/features/skill/api/skill.server";
+import { getSkillById, getSkillProfile } from "@/features/skill/api/skill.server";
 
 async function SkillDetail({ skillId }: { skillId: number }) {
   const [skill, profileData] = await Promise.all([
-    getSkill(skillId),
+    getSkillById(skillId),
     getSkillProfile(skillId),
   ]);
   const profile = profileData?.profiles ?? null;

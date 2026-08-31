@@ -9,10 +9,16 @@ export { default as SkillCreateHeader } from "./components/create/Header";
 export { default as useSkillsStore } from "./model/useSkillsStore";
 
 // api
-export { getSkill, uploadSkillImage } from "./api/skill.service";
+export { getSkill } from "./api/skill.repository";
+export { getSkillById, getSkillProfile } from "./api/skill.server";
 
 // actions
-export { createSkillAction } from "./actions";
+export {
+  createSkillAction,
+  addSkillAction,
+  removeSkillAction,
+  uploadSkillImageAction,
+} from "./actions";
 
 // schemas
 export { skillSchema } from "./schemas/skill.schema";
